@@ -1,51 +1,62 @@
-import { FormControl, InputLabel, NativeSelect } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { useFiltersDispatch, useFiltersContext } from "@context/filter-context/filter-context";
 import { getSortedMovies } from "@/api/fetchData";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const SelectRatingData = {
   popularity: "По популярности",
   vote_average: "По рейтингу",
 };
 
-const Select = () => {
+const SelectFilter = () => {
   const filtersData = useFiltersContext();
   const dispatch = useFiltersDispatch();
+  const [open, setOpen] = useState(false);
 
-  function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  function handleSelectChange(event: SelectChangeEvent) {
     dispatch({ type: "setSortBy", sortBy: event.target.value });
   }
 
   useEffect(() => {
     async function fetchSortedMovieList() {
-      const data = await getSortedMovies(filtersData.sortBy, 1);
+      const data = await getSortedMovies(filtersData.sortBy, filtersData.sortedMovies.page);
       const { page, results } = data;
       dispatch({ type: "setSortedMovies", data: { page, results } });
     }
     fetchSortedMovieList();
-  }, [filtersData.sortBy, dispatch]);
+  }, [filtersData.sortBy, filtersData.sortedMovies.page, dispatch]);
 
   return (
     <FormControl fullWidth>
-      <InputLabel variant="standard" htmlFor="rating-select">
+      <InputLabel variant="standard" htmlFor="demo-controlled-open-select-label">
         Сортировать по:
       </InputLabel>
-      <NativeSelect
-        defaultValue={SelectRatingData.popularity}
-        inputProps={{
-          name: "rating-select",
-          id: "rating-select",
-        }}
+      <Select
+        variant="standard"
+        open={open}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        value={filtersData.sortBy}
+        id="rating-select"
+        labelId="demo-controlled-open-select-label"
         onChange={handleSelectChange}
       >
         {Object.values(SelectRatingData).map((value) => (
-          <option value={value} key={value}>
+          <MenuItem value={value} key={value}>
             {value}
-          </option>
+          </MenuItem>
         ))}
-      </NativeSelect>
+      </Select>
     </FormControl>
   );
 };
 
-export default Select;
+export default SelectFilter;

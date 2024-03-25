@@ -39,7 +39,7 @@ const Filters = () => {
   }, [filtersData.sortBy, filtersData.sortedMovies.page, dispatch]);
 
   return (
-    <Paper sx={{ flex: 1, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+    <Paper sx={{ flex: 1, p: 2, display: "flex", flexDirection: "column", gap: 4 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6" sx={{ fontWeight: "medium" }}>
           Фильтры
