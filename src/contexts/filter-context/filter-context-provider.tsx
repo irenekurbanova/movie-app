@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import { FilterContext, FilterDispatchContext, filterReducer, initialFiltersData } from "./filter-context";
 
 type FilterProviderProps = {
-  children: React.ReactNode;
+  children: JSX.Element;
 };
 
 export function FilterProvider({ children }: FilterProviderProps) {

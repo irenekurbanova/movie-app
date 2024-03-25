@@ -19,7 +19,8 @@ const Select = () => {
   useEffect(() => {
     async function fetchSortedMovieList() {
       const data = await getSortedMovies(filtersData.sortBy, 1);
-      dispatch({ type: "setSortedMovies", data: data });
+      const { page, results } = data;
+      dispatch({ type: "setSortedMovies", data: { page, results } });
     }
     fetchSortedMovieList();
   }, [filtersData.sortBy, dispatch]);

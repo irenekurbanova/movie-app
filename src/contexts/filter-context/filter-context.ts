@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, Dispatch } from "react";
 
 type FiltersDataProps = {
   genres: { id: string; name: string; checked: boolean }[];
@@ -33,17 +33,17 @@ const initialFiltersData: FiltersDataProps = {
 };
 
 const FilterContext = createContext<FiltersDataProps>(initialFiltersData);
-const FilterDispatchContext = createContext<React.Dispatch<Action>>(() => {});
+const FilterDispatchContext = createContext<Dispatch<Action>>(() => null);
 
 type Action =
   | { type: "setInitialGenres"; genres: [] }
   | { type: "setCheckedGenre"; name: string[] }
   | { type: "setSortBy"; sortBy: string }
   | { type: "setReleaseYear"; yearRange: number[] }
-  | { type: "setSortedMovies"; data: [] }
+  | { type: "setSortedMovies"; data: { page: number; results: [] } }
   | { type: "setNextPage"; page: number };
 
-function filterReducer(filtersState: FiltersDataProps, action: Action) {
+function filterReducer(filtersState: FiltersDataProps, action: Action): FiltersDataProps {
   switch (action.type) {
     case "setInitialGenres": {
       return { ...filtersState, genres: action.genres };

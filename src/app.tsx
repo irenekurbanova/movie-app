@@ -1,5 +1,4 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import "./app.css";
 import { createBrowserRouter, LoaderFunction, RouterProvider } from "react-router-dom";
 import { movieLoader } from "./routes/root";
 import Root from "./routes/root";
