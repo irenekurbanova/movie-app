@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_BASE_URL;
 const TMBD_GET_REQUEST = axios.create({
   baseURL: API_URL,
   headers: {
-    Accept: "application/json",
+    accept: "application/json",
     Authorization: `Bearer ${API_ACCESS_TOKEN}`,
   },
 });
@@ -21,6 +21,7 @@ export async function getGenreList() {
 }
 
 export async function getSortedMovies(sortBy: string, page: number = 1) {
+  console.log(page);
   let url;
   sortBy === "По популярности"
     ? (url = `/movie/popular?language=ru-US&page=${page}`)

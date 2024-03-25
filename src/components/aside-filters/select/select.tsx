@@ -28,7 +28,8 @@ const SelectFilter = () => {
   useEffect(() => {
     async function fetchSortedMovieList() {
       const data = await getSortedMovies(filtersData.sortBy, filtersData.sortedMovies.page);
-      const { page, results } = data;
+      const page = data.page;
+      const results = data.results;
       dispatch({ type: "setSortedMovies", data: { page, results } });
     }
     fetchSortedMovieList();
@@ -41,6 +42,7 @@ const SelectFilter = () => {
       </InputLabel>
       <Select
         variant="standard"
+        defaultOpen={true}
         open={open}
         onClose={handleClose}
         onOpen={handleOpen}
