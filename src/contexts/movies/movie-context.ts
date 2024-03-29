@@ -1,41 +1,45 @@
 import { createContext, useContext, Dispatch } from "react";
 
-type FiltersDataProps = {
+export type MovieProps = {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: false;
+  vote_average: number;
+  vote_count: number;
+  isFavorite: boolean;
+};
+
+export type MovieDataProps = {
   genres: { id: string; name: string; checked: boolean }[];
   sortBy: string;
   releaseYear: { min: number; max: number; pickedRange: number[] };
-  sortedMovies: {
-    page: number;
-    results: {
-      adult: boolean;
-      backdrop_path: string;
-      genre_ids: number[];
-      id: number;
-      original_language: string;
-      original_title: string;
-      overview: string;
-      popularity: number;
-      poster_path: string;
-      release_date: string;
-      title: string;
-      video: false;
-      vote_average: number;
-      vote_count: number;
-    }[];
-  };
+  sortedMovies: { page: number; results: MovieProps[] };
+  favorites: MovieProps[];
 };
 
-const initialFiltersData: FiltersDataProps = {
+const initialMovieData: MovieDataProps = {
   genres: [],
   sortBy: "По популярности",
   releaseYear: { min: 1960, max: 2024, pickedRange: [1987, 2001] },
   sortedMovies: { page: 1, results: [] },
+  favorites: [],
 };
 
-const FilterContext = createContext<FiltersDataProps>(initialFiltersData);
-const FilterDispatchContext = createContext<Dispatch<Action>>(() => null);
+const MoviesContext = createContext<MovieDataProps>(initialMovieData);
+const MoviesDispatchContext = createContext<Dispatch<Action>>(() => null);
 
 type Action =
+  | { type: "addFavorite"; isFavorite: boolean; id: string | string[] }
+  | { type: "setFavoritesList"; favorites: [] }
   | { type: "setInitialGenres"; genres: [] }
   | { type: "setCheckedGenre"; name: string[] }
   | { type: "setSortBy"; sortBy: string }
@@ -43,8 +47,24 @@ type Action =
   | { type: "setSortedMovies"; data: { page: number; results: [] } }
   | { type: "setNextPage"; page: number };
 
-function filterReducer(filtersState: FiltersDataProps, action: Action): FiltersDataProps {
+function filterReducer(filtersState: MovieDataProps, action: Action): MovieDataProps {
   switch (action.type) {
+    case "addFavorite": {
+      return {
+        ...filtersState,
+        sortedMovies: {
+          ...filtersState.sortedMovies,
+          results: filtersState.sortedMovies.results.map((movie) => {
+            if (action.id.includes(movie.id.toString())) {
+              return { ...movie, isFavorite: action.isFavorite };
+            } else return { ...movie };
+          }),
+        },
+      };
+    }
+    case "setFavoritesList": {
+      return { ...filtersState, favorites: action.favorites };
+    }
     case "setInitialGenres": {
       return { ...filtersState, genres: action.genres };
     }
@@ -78,19 +98,12 @@ function filterReducer(filtersState: FiltersDataProps, action: Action): FiltersD
   }
 }
 
-function useFiltersContext() {
-  return useContext(FilterContext);
+function useMoviesContext() {
+  return useContext(MoviesContext);
 }
 
-function useFiltersDispatch() {
-  return useContext(FilterDispatchContext);
+function useMoviesDispatch() {
+  return useContext(MoviesDispatchContext);
 }
 
-export {
-  initialFiltersData,
-  FilterContext,
-  FilterDispatchContext,
-  filterReducer,
-  useFiltersContext,
-  useFiltersDispatch,
-};
+export { initialMovieData, MoviesContext, MoviesDispatchContext, filterReducer, useMoviesContext, useMoviesDispatch };

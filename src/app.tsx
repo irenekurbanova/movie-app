@@ -1,11 +1,11 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { createBrowserRouter, LoaderFunction, RouterProvider } from "react-router-dom";
-import { movieLoader } from "./routes/root";
-import Root from "./routes/root";
-import ErrorPage from "./routes/error-page";
-import MovieDetails from "./routes/movie-details-page";
+import { movieLoader } from "./pages/root";
+import Root from "./pages/root";
+import ErrorPage from "./pages/error-page";
+import MovieDetails from "./pages/movie-details-page";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HomePage from "./routes/home-page";
+import HomePage from "./pages/home-page";
 
 const darkTheme = createTheme({
   palette: {

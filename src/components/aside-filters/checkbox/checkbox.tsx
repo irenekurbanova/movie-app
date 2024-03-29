@@ -1,4 +1,4 @@
-import { useFiltersContext, useFiltersDispatch } from "@/contexts/filter-context/filter-context";
+import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material";
 
@@ -6,8 +6,8 @@ const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
 const CheckboxFilter = () => {
-  const filtersData = useFiltersContext();
-  const dispatch = useFiltersDispatch();
+  const filtersData = useMoviesContext();
+  const dispatch = useMoviesDispatch();
   const labels = filtersData.genres.map((genre) => genre.name);
 
   function handleChange(event: React.SyntheticEvent, value: string[]) {

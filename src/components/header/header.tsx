@@ -3,7 +3,11 @@ import { AccountCircle } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
 
-const Header = () => {
+type HeaderProps = {
+  openModal: () => void;
+};
+
+const Header = ({ openModal }: HeaderProps) => {
   return (
     <Box sx={{ minWidth: "100%", display: "flex" }}>
       <AppBar position="static">
@@ -26,6 +30,7 @@ const Header = () => {
             aria-controls="primary-search-account-menu"
             aria-haspopup="true"
             color="inherit"
+            onClick={openModal}
           >
             <AccountCircle />
           </IconButton>

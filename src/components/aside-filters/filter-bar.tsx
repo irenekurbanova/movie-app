@@ -3,17 +3,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import Select from "./select/select";
 import RangeSlider from "./range-slider/range-slider";
 import CheckboxFilter from "./checkbox/checkbox";
-import { useFiltersDispatch, useFiltersContext } from "@context/filter-context/filter-context";
+import { useMoviesContext, useMoviesDispatch, MovieProps } from "@/contexts/movies/movie-context";
 import { useEffect } from "react";
-import { getGenreList, getSortedMovies } from "@api/fetchData";
+import { getGenreList, getSortedMovies } from "@/api/movie-data";
 
 const Filters = () => {
-  const filtersData = useFiltersContext();
-  const dispatch = useFiltersDispatch();
+  const filtersData = useMoviesContext();
+  const dispatch = useMoviesDispatch();
 
   useEffect(() => {
     async function fetchGenres() {
       const data = await getGenreList();
+
       const initGenreArray = data.genres.map((genre: { id: number; name: string }) => {
         return {
           id: genre.id.toString(),
@@ -33,7 +34,14 @@ const Filters = () => {
   useEffect(() => {
     async function loadNextPage() {
       const data = await getSortedMovies(filtersData.sortBy, filtersData.sortedMovies.page);
-      dispatch({ type: "setSortedMovies", data: data });
+      const page = data.page;
+      const results = data.results.map((results: MovieProps) => {
+        return {
+          ...results,
+          isFavorite: false,
+        };
+      });
+      dispatch({ type: "setSortedMovies", data: { page, results } });
     }
     loadNextPage();
   }, [filtersData.sortBy, filtersData.sortedMovies.page, dispatch]);

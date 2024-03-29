@@ -2,7 +2,7 @@
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Typography } from "@mui/material";
-import { useFiltersContext, useFiltersDispatch } from "../../../contexts/filter-context/filter-context";
+import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -13,8 +13,8 @@ type MarksProps = {
 };
 
 const RangeSlider = () => {
-  const dispatch = useFiltersDispatch();
-  const filtersData = useFiltersContext();
+  const dispatch = useMoviesDispatch();
+  const filtersData = useMoviesContext();
 
   const marks = (): MarksProps[] => {
     const marksArray = [];

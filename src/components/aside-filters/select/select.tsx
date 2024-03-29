@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { useFiltersDispatch, useFiltersContext } from "@context/filter-context/filter-context";
-import { getSortedMovies } from "@/api/fetchData";
+import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { getSortedMovies } from "@/api/movie-data";
 import { useEffect, useState } from "react";
 
 const SelectRatingData = {
@@ -9,8 +9,8 @@ const SelectRatingData = {
 };
 
 const SelectFilter = () => {
-  const filtersData = useFiltersContext();
-  const dispatch = useFiltersDispatch();
+  const filtersData = useMoviesContext();
+  const dispatch = useMoviesDispatch();
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -28,6 +28,7 @@ const SelectFilter = () => {
   useEffect(() => {
     async function fetchSortedMovieList() {
       const data = await getSortedMovies(filtersData.sortBy, filtersData.sortedMovies.page);
+
       const page = data.page;
       const results = data.results;
       dispatch({ type: "setSortedMovies", data: { page, results } });

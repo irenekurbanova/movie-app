@@ -1,4 +1,4 @@
-import { getMovieCredits } from "@/api/fetchData";
+import { getMovieCredits } from "@/api/movie-data";
 import { TabPanel } from "@mui/lab";
 import { List, ListItem, ListItemText, Avatar, ListItemAvatar } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -43,6 +43,7 @@ const MovieCredits = ({ id }: MovieCreditsProps) => {
   useEffect(() => {
     async function getCredentials() {
       const data = await getMovieCredits(id);
+
       const { cast, crew } = data;
       setCast(cast);
       setCrew(crew);

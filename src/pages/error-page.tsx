@@ -28,6 +28,7 @@ export default function ErrorPage() {
     <Container
       maxWidth="sm"
       sx={{
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         gap: "16px",
