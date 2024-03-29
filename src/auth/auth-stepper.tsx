@@ -6,6 +6,7 @@ import { isValidEmail } from "@/utilities/helpers";
 import Input from "./input-form";
 import Cookies from "js-cookie";
 import { getAccountID } from "@/api/authentication";
+import { API_ACCESS_TOKEN } from "@/api/config";
 
 type AuthenticationStepperProps = {
   closeModal: () => void;
@@ -24,7 +25,7 @@ const AuthenticationStepper = ({ closeModal }: AuthenticationStepperProps) => {
   const theme = useTheme();
   const maxSteps = steps.length;
   const [activeStep, setActiveStep] = useState(0);
-  const [inputValue, setInputValue] = useState({ email: "", token: "" });
+  const [inputValue, setInputValue] = useState({ email: "", token: API_ACCESS_TOKEN });
 
   const dispatch = useAuthDispatch();
 
