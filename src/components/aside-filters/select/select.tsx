@@ -23,18 +23,16 @@ const SelectFilter = () => {
 
   function handleSelectChange(event: SelectChangeEvent) {
     dispatch({ type: "setSortBy", sortBy: event.target.value });
+    dispatch({ type: "setActiveFilter", filter: "По популярности" });
   }
 
   useEffect(() => {
     async function fetchSortedMovieList() {
-      const data = await getSortedMovies(filtersData.sortBy, filtersData.sortedMovies.page);
-
-      const page = data.page;
-      const results = data.results;
-      dispatch({ type: "setSortedMovies", data: { page, results } });
+      const data = await getSortedMovies(filtersData.sortBy, filtersData.movieList.page);
+      dispatch({ type: "setMovieList", data: data });
     }
     fetchSortedMovieList();
-  }, [filtersData.sortBy, filtersData.sortedMovies.page, dispatch]);
+  }, [filtersData.sortBy, filtersData.movieList.page, dispatch]);
 
   return (
     <FormControl fullWidth>

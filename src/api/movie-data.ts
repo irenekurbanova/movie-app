@@ -6,6 +6,19 @@ interface ValidationError {
   errors: Record<string, string[]>;
 }
 
+export async function getMovieBySearch(query: string, page: number = 1) {
+  try {
+    const response = await TMBD_GET_REQUEST.get(`/search/movie?include_adult=true&language=ru-RU&page=${page}`, {
+      params: { query: query },
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getFavoriteMovieList(account_id: string) {
   try {
     const response = await TMBD_GET_REQUEST.get(`/account/${account_id}/favorite/movies`);

@@ -53,7 +53,7 @@ const MovieCredits = ({ id }: MovieCreditsProps) => {
 
   return (
     <>
-      <TabPanel value="2">
+      <TabPanel value="2" sx={{ p: 0 }}>
         <List>
           {cast.map((actor) => {
             return (
@@ -72,7 +72,7 @@ const MovieCredits = ({ id }: MovieCreditsProps) => {
           })}
         </List>
       </TabPanel>
-      <TabPanel value="3">
+      <TabPanel value="3" sx={{ p: 0 }}>
         <List>
           {crew.map((member) => {
             return (

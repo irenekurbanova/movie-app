@@ -1,6 +1,8 @@
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material";
+import { getGenreList } from "@/api/movie-data";
+import { useEffect } from "react";
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
@@ -9,6 +11,22 @@ const CheckboxFilter = () => {
   const filtersData = useMoviesContext();
   const dispatch = useMoviesDispatch();
   const labels = filtersData.genres.map((genre) => genre.name);
+
+  useEffect(() => {
+    async function fetchGenres() {
+      const data = await getGenreList();
+
+      const initGenreArray = data.genres.map((genre: { id: number; name: string }) => {
+        return {
+          id: genre.id.toString(),
+          name: genre.name,
+          checked: false,
+        };
+      });
+      dispatch({ type: "setInitialGenres", genres: initGenreArray });
+    }
+    fetchGenres();
+  }, [dispatch]);
 
   function handleChange(event: React.SyntheticEvent, value: string[]) {
     dispatch({ type: "setCheckedGenre", name: value });

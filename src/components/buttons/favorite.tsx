@@ -1,41 +1,45 @@
-// import { IconButton } from "@mui/material";
-// import { useEffect } from "react";
-// import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-// import FavoriteIcon from "@mui/icons-material/Favorite";
-// import { useMoviesContext } from "@/contexts/movies/movie-context";
+import { IconButton } from "@mui/material";
+import { useState } from "react";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { addToFavorites, getFavoriteMovieList } from "@/api/movie-data";
+import { useAuthContext } from "@/contexts/authentication/auth-context";
 
-// type FavoriteButtonProps = {
-//   movieID: string;
-// };
+type FavoriteButtonProps = {
+  isFavorite: boolean;
+  id: string;
+};
 
-// const FavoriteButton = ({ movieID }: FavoriteButtonProps) => {
-//   const moviesData = useMoviesContext();
+const FavoriteButton = ({ isFavorite, id }: FavoriteButtonProps) => {
+  const movieData = useMoviesContext();
+  const dispatch = useMoviesDispatch();
+  const authenticationData = useAuthContext();
+  const [favorite, setFavorite] = useState(isFavorite);
 
-//   useEffect(() => {
-//     async function updateFavorites(movieID) {}
-//   });
+  async function addToFavoriteHandler() {
+    setFavorite((favorite) => !favorite);
+    try {
+      const currentMovieIsFavorite = movieData.favorites.results.some((favorite) => favorite.id.toString() === id);
+      if (currentMovieIsFavorite) {
+        await addToFavorites(authenticationData.session_id, id, "delete");
+        const favoriteMoviesList = await getFavoriteMovieList(authenticationData.session_id);
+        dispatch({ type: "setFavoritesList", favorites: favoriteMoviesList });
+      } else {
+        await addToFavorites(authenticationData.session_id, id, "add");
+        const favoriteMoviesList = await getFavoriteMovieList(authenticationData.session_id);
+        dispatch({ type: "setFavoritesList", favorites: favoriteMoviesList });
+      }
+    } catch (error) {
+      console.error(error);
+      setFavorite((favorite) => !favorite);
+    }
+  }
 
-//   async function handleAddToFavorites(movie_id: string) {
-//     try {
-//       if (moviesData.favorites.find((fav) => fav.id.toString() === movie_id)) {
-//         await addToFavorites(authenticationData.session_id, movie_id, "delete");
-//         dispatch({ type: "addFavorite", isFavorite: false, id: movie_id });
-//       } else {
-//         await addToFavorites(authenticationData.session_id, movie_id, "add");
-//         dispatch({ type: "addFavorite", isFavorite: true, id: movie_id });
-//       }
-//       const favMovies = await getFavoriteMovieList(authenticationData.session_id);
-//       dispatch({ type: "setFavoritesList", favorites: favMovies.results });
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
+  return (
+    <IconButton aria-label="favorite" onClick={addToFavoriteHandler}>
+      <FavoriteIcon color={favorite ? "error" : "disabled"} />
+    </IconButton>
+  );
+};
 
-//   return (
-//     <IconButton aria-label="favorite" onClick={() => handleAddToFavorites(movie.id.toString())}>
-//       {movie.isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-//     </IconButton>
-//   );
-// };
-
-// export default FavoriteButton;
+export default FavoriteButton;

@@ -15,52 +15,49 @@ export type MovieProps = {
   video: false;
   vote_average: number;
   vote_count: number;
-  isFavorite: boolean;
 };
 
 export type MovieDataProps = {
   genres: { id: string; name: string; checked: boolean }[];
   sortBy: string;
+  query: string;
   releaseYear: { min: number; max: number; pickedRange: number[] };
-  sortedMovies: { page: number; results: MovieProps[] };
-  favorites: MovieProps[];
+  activeFilter: string;
+  movieList: { page: number; results: MovieProps[]; total_pages: number; total_results: number };
+  favorites: { page: number; results: MovieProps[]; total_pages: number; total_results: number };
 };
 
 const initialMovieData: MovieDataProps = {
   genres: [],
   sortBy: "По популярности",
+  query: "",
   releaseYear: { min: 1960, max: 2024, pickedRange: [1987, 2001] },
-  sortedMovies: { page: 1, results: [] },
-  favorites: [],
+  activeFilter: "По популярности",
+  movieList: { page: 1, results: [], total_pages: 0, total_results: 0 },
+  favorites: { page: 1, results: [], total_pages: 0, total_results: 0 },
 };
 
 const MoviesContext = createContext<MovieDataProps>(initialMovieData);
 const MoviesDispatchContext = createContext<Dispatch<Action>>(() => null);
 
 type Action =
-  | { type: "addFavorite"; isFavorite: boolean; id: string | string[] }
-  | { type: "setFavoritesList"; favorites: [] }
+  | { type: "setQuery"; query: string }
+  | { type: "setActiveFilter"; filter: string }
+  | { type: "setFavoritesList"; favorites: { page: number; results: []; total_pages: number; total_results: number } }
   | { type: "setInitialGenres"; genres: [] }
   | { type: "setCheckedGenre"; name: string[] }
   | { type: "setSortBy"; sortBy: string }
   | { type: "setReleaseYear"; yearRange: number[] }
-  | { type: "setSortedMovies"; data: { page: number; results: [] } }
+  | { type: "setMovieList"; data: { page: number; results: []; total_pages: number; total_results: number } }
   | { type: "setNextPage"; page: number };
 
 function filterReducer(filtersState: MovieDataProps, action: Action): MovieDataProps {
   switch (action.type) {
-    case "addFavorite": {
-      return {
-        ...filtersState,
-        sortedMovies: {
-          ...filtersState.sortedMovies,
-          results: filtersState.sortedMovies.results.map((movie) => {
-            if (action.id.includes(movie.id.toString())) {
-              return { ...movie, isFavorite: action.isFavorite };
-            } else return { ...movie };
-          }),
-        },
-      };
+    case "setQuery": {
+      return { ...filtersState, query: action.query };
+    }
+    case "setActiveFilter": {
+      return { ...filtersState, activeFilter: action.filter };
     }
     case "setFavoritesList": {
       return { ...filtersState, favorites: action.favorites };
@@ -68,11 +65,11 @@ function filterReducer(filtersState: MovieDataProps, action: Action): MovieDataP
     case "setInitialGenres": {
       return { ...filtersState, genres: action.genres };
     }
-    case "setSortedMovies": {
-      return { ...filtersState, sortedMovies: action.data };
+    case "setMovieList": {
+      return { ...filtersState, movieList: action.data };
     }
     case "setNextPage": {
-      return { ...filtersState, sortedMovies: { ...filtersState.sortedMovies, page: action.page } };
+      return { ...filtersState, movieList: { ...filtersState.movieList, page: action.page } };
     }
     case "setCheckedGenre": {
       return {
@@ -87,7 +84,7 @@ function filterReducer(filtersState: MovieDataProps, action: Action): MovieDataP
       };
     }
     case "setSortBy": {
-      return { ...filtersState, sortBy: action.sortBy, sortedMovies: { ...filtersState.sortedMovies, page: 1 } };
+      return { ...filtersState, sortBy: action.sortBy, movieList: { ...filtersState.movieList, page: 1 } };
     }
     case "setReleaseYear": {
       return { ...filtersState, releaseYear: { ...filtersState.releaseYear, pickedRange: action.yearRange } };
