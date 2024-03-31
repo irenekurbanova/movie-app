@@ -3,12 +3,15 @@ import { AccountCircle } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
 import Search from "./search";
+import { useAuthContext } from "@/contexts/authentication/auth-context";
 
 type HeaderProps = {
   openModal: () => void;
 };
 
 const Header = ({ openModal }: HeaderProps) => {
+  const isAutenticated = useAuthContext();
+
   return (
     <Box sx={{ minWidth: "100%", display: "flex" }}>
       <AppBar position="static">
@@ -37,7 +40,7 @@ const Header = ({ openModal }: HeaderProps) => {
               display="flex"
               justifyContent="space-between"
             >
-              <Search />
+              {isAutenticated.isLoggedIn && <Search />}
             </Grid>
             <Grid
               item

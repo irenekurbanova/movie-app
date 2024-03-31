@@ -28,11 +28,13 @@ const SelectFilter = () => {
 
   useEffect(() => {
     async function fetchSortedMovieList() {
-      const data = await getSortedMovies(filtersData.sortBy, filtersData.movieList.page);
-      dispatch({ type: "setMovieList", data: data });
+      if (filtersData.activeFilter === "По популярности") {
+        const data = await getSortedMovies(filtersData.sortBy, filtersData.movieList.page);
+        dispatch({ type: "setMovieList", data: data });
+      } else return;
     }
     fetchSortedMovieList();
-  }, [filtersData.sortBy, filtersData.movieList.page, dispatch]);
+  }, [filtersData.sortBy, filtersData.movieList.page, dispatch, filtersData.activeFilter]);
 
   return (
     <FormControl fullWidth>

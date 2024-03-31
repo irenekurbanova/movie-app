@@ -6,9 +6,13 @@ interface ValidationError {
   errors: Record<string, string[]>;
 }
 
-export async function getMovieBySearch(query: string, page: number = 1) {
+export async function getMovieBySearch(query: string, page?: number) {
+  let pageNumber;
+  if (!page) {
+    pageNumber = 1;
+  } else pageNumber = page;
   try {
-    const response = await TMBD_GET_REQUEST.get(`/search/movie?include_adult=true&language=ru-RU&page=${page}`, {
+    const response = await TMBD_GET_REQUEST.get(`/search/movie?include_adult=true&language=ru-RU&page=${pageNumber}`, {
       params: { query: query },
     });
     if (response.status === 200) {
@@ -55,16 +59,20 @@ export async function getGenreList() {
       console.error(error.response);
       // Do something with this error...
     } else {
-      // console.error(error);
+      console.error(error);
     }
   }
 }
 
-export async function getSortedMovies(sortBy: string, page: number = 1) {
+export async function getSortedMovies(sortBy: string, page?: number) {
+  let pageNumber;
+  if (!page) {
+    pageNumber = 1;
+  } else pageNumber = page;
   let url;
   sortBy === "По популярности"
-    ? (url = `/movie/popular?language=ru-US&page=${page}`)
-    : (url = `/movie/top_rated?language=ru-US&page=${page}`);
+    ? (url = `/movie/popular?language=ru-US&page=${pageNumber}`)
+    : (url = `/movie/top_rated?language=ru-US&page=${pageNumber}`);
   try {
     const response = await TMBD_GET_REQUEST.get(url);
     if (response.status === 200) {

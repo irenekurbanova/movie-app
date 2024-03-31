@@ -12,26 +12,28 @@ const Movies = () => {
   const dispatch = useMoviesDispatch();
 
   useEffect(() => {
-    async function loadNextPage() {
+    async function loadMovies() {
       let data;
-      if (moviesData.activeFilter === "По популярности") {
-        data = await getSortedMovies(moviesData.sortBy, moviesData.movieList.page);
-        dispatch({ type: "setMovieList", data: data });
-      }
-      if (moviesData.activeFilter === "Поиск") {
-        data = await getMovieBySearch(moviesData.query, moviesData.movieList.page);
-        dispatch({ type: "setMovieList", data: data });
+      try {
+        const favoriteMovieList = await getFavoriteMovieList(authenticationData.session_id);
+        dispatch({ type: "setFavoritesList", favorites: favoriteMovieList });
+        if (moviesData.activeFilter === "По популярности") {
+          console.log("фильтр");
+          data = await getSortedMovies(moviesData.sortBy, moviesData.movieList.page);
+          dispatch({ type: "setMovieList", data: data });
+        }
+        if (moviesData.activeFilter === "Поиск") {
+          console.log("поиск");
+          data = await getMovieBySearch(moviesData.query, moviesData.movieList.page);
+          dispatch({ type: "setMovieList", data: data });
+        }
+      } catch (error) {
+        console.error(error);
       }
     }
-    async function getFavorites() {
-      const favoriteMovieList = await getFavoriteMovieList(authenticationData.session_id);
-      dispatch({ type: "setFavoritesList", favorites: favoriteMovieList });
-    }
-
-    getFavorites();
-    loadNextPage();
+    loadMovies();
   }, [
-    authenticationData,
+    authenticationData.session_id,
     dispatch,
     moviesData.activeFilter,
     moviesData.movieList.page,
