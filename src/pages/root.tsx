@@ -8,6 +8,7 @@ import { AuthenticationProvider } from "@/contexts/authentication/auth-context-p
 import Modal from "@/components/modal/modal";
 import { useState } from "react";
 import AuthenticationStepper from "@/auth/auth-stepper";
+import { FiltersProvider } from "@/contexts/filters/filter-context-provider";
 
 const Paths = {
   movieDetails: "movies/:movieId",
@@ -39,22 +40,24 @@ export default function Root() {
 
   return (
     <AuthenticationProvider>
-      <MovieProvider>
-        <Container
-          maxWidth="xl"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          <Modal open={open} close={closeModal}>
-            <AuthenticationStepper closeModal={closeModal} />
-          </Modal>
-          <Header openModal={openModal} />
-          <Outlet />
-        </Container>
-      </MovieProvider>
+      <FiltersProvider>
+        <MovieProvider>
+          <Container
+            maxWidth="xl"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
+            <Modal open={open} close={closeModal}>
+              <AuthenticationStepper closeModal={closeModal} />
+            </Modal>
+            <Header openModal={openModal} />
+            <Outlet />
+          </Container>
+        </MovieProvider>
+      </FiltersProvider>
     </AuthenticationProvider>
   );
 }

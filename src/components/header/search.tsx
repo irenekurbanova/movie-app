@@ -1,13 +1,13 @@
 import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { getMovieBySearch } from "@/api/movie-data";
-import { MovieProps, useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useFiltersDispatch } from "@/contexts/filters/filter-context";
+import { useMoviesDispatch } from "@/contexts/movies/movie-context";
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState("");
-  const movieData = useMoviesContext();
-  const dispatch = useMoviesDispatch();
+  const dispatchFilters = useFiltersDispatch();
+  const dispatchMovies = useMoviesDispatch();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchValue(event.target.value);
@@ -18,24 +18,12 @@ const Search = () => {
     if (!searchValue.length) {
       return;
     }
-    dispatch({ type: "setQuery", query: searchValue });
-    dispatch({ type: "setActiveFilter", filter: "Поиск" });
+    dispatchFilters({ type: "setQuery", query: searchValue });
+    dispatchFilters({ type: "setActiveFilter", filter: "select", active: false });
+    dispatchFilters({ type: "setActiveFilter", filter: "search", active: true });
+    dispatchMovies({ type: "setPage", page: 1 });
     setSearchValue("");
   }
-
-  useEffect(() => {
-    async function getSearchList() {
-      const movieList = await getMovieBySearch(movieData.query);
-      const results = movieList.results.map((results: MovieProps) => {
-        return {
-          ...results,
-          isFavorite: false,
-        };
-      });
-      dispatch({ type: "setMovieList", data: { ...movieList, results: results } });
-    }
-    getSearchList();
-  }, [movieData.query, dispatch]);
 
   return (
     <Paper component="form" sx={{ flex: 1, display: "flex", alignItems: "center" }} onSubmit={handleSubmit}>

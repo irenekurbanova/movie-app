@@ -1,15 +1,15 @@
-import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material";
 import { getGenreList } from "@/api/movie-data";
 import { useEffect } from "react";
+import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
 const CheckboxFilter = () => {
-  const filtersData = useMoviesContext();
-  const dispatch = useMoviesDispatch();
+  const filtersData = useFiltersContext();
+  const dispatch = useFiltersDispatch();
   const labels = filtersData.genres.map((genre) => genre.name);
 
   useEffect(() => {
@@ -26,10 +26,11 @@ const CheckboxFilter = () => {
       dispatch({ type: "setInitialGenres", genres: initGenreArray });
     }
     fetchGenres();
-  });
+  }, []);
 
   function handleChange(event: React.SyntheticEvent, value: string[]) {
     dispatch({ type: "setCheckedGenre", name: value });
+    dispatch({ type: "setActiveFilter", filter: "checkbox", active: true });
   }
 
   return (
@@ -50,7 +51,9 @@ const CheckboxFilter = () => {
           </li>
         );
       }}
-      renderInput={(params) => <TextField {...params} variant="standard" label="Жанры" />}
+      renderInput={(params) => {
+        return <TextField {...params} variant="standard" label="Жанры" />;
+      }}
     />
   );
 };

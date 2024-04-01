@@ -1,8 +1,7 @@
-// import { useState } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Typography } from "@mui/material";
-import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -13,8 +12,8 @@ type MarksProps = {
 };
 
 const RangeSlider = () => {
-  const dispatch = useMoviesDispatch();
-  const filtersData = useMoviesContext();
+  const filtersData = useFiltersContext();
+  const dispatch = useFiltersDispatch();
 
   const marks = (): MarksProps[] => {
     const marksArray = [];
@@ -28,6 +27,7 @@ const RangeSlider = () => {
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     dispatch({ type: "setReleaseYear", yearRange: newValue as number[] });
+    dispatch({ type: "setActiveFilter", filter: "range", active: true });
   };
 
   return (

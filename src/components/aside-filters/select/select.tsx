@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
-import { getSortedMovies } from "@/api/movie-data";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
+import { useMoviesDispatch } from "@/contexts/movies/movie-context";
 
 const SelectRatingData = {
   popularity: "По популярности",
@@ -9,8 +9,10 @@ const SelectRatingData = {
 };
 
 const SelectFilter = () => {
-  const filtersData = useMoviesContext();
-  const dispatch = useMoviesDispatch();
+  const filtersData = useFiltersContext();
+  const dispatchFilters = useFiltersDispatch();
+  const dispatchMovies = useMoviesDispatch();
+
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -22,19 +24,10 @@ const SelectFilter = () => {
   };
 
   function handleSelectChange(event: SelectChangeEvent) {
-    dispatch({ type: "setSortBy", sortBy: event.target.value });
-    dispatch({ type: "setActiveFilter", filter: "По популярности" });
+    dispatchFilters({ type: "setSortBy", sortBy: event.target.value });
+    dispatchFilters({ type: "setActiveFilter", filter: "select", active: true });
+    dispatchMovies({ type: "setPage", page: 1 });
   }
-
-  useEffect(() => {
-    async function fetchSortedMovieList() {
-      if (filtersData.activeFilter === "По популярности") {
-        const data = await getSortedMovies(filtersData.sortBy, filtersData.movieList.page);
-        dispatch({ type: "setMovieList", data: data });
-      } else return;
-    }
-    fetchSortedMovieList();
-  }, [filtersData.sortBy, filtersData.movieList.page, dispatch, filtersData.activeFilter]);
 
   return (
     <FormControl fullWidth>

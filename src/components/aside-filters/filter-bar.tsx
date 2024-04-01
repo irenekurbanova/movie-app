@@ -4,13 +4,19 @@ import Select from "./select/select";
 import RangeSlider from "./range-slider/range-slider";
 import CheckboxFilter from "./checkbox/checkbox";
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { useFiltersDispatch } from "@/contexts/filters/filter-context";
 
 const Filters = () => {
+  const dispatch = useFiltersDispatch();
   const movieData = useMoviesContext();
-  const dispatch = useMoviesDispatch();
+  const dispatchMovies = useMoviesDispatch();
 
   function handlePaginationChange(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch({ type: "setNextPage", page: value });
+    dispatchMovies({ type: "setPage", page: value });
+  }
+
+  function clearFiltersHandler() {
+    dispatch({ type: "clearFilters" });
   }
 
   return (
@@ -19,7 +25,7 @@ const Filters = () => {
         <Typography variant="h6" sx={{ fontWeight: "medium" }}>
           Фильтры
         </Typography>
-        <IconButton>
+        <IconButton onClick={clearFiltersHandler}>
           <CloseIcon />
         </IconButton>
       </Box>
