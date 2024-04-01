@@ -19,7 +19,6 @@ const Search = () => {
       return;
     }
     dispatchFilters({ type: "setQuery", query: searchValue });
-    dispatchFilters({ type: "setActiveFilter", filter: "select", active: false });
     dispatchFilters({ type: "setActiveFilter", filter: "search", active: true });
     dispatchMovies({ type: "setPage", page: 1 });
     setSearchValue("");

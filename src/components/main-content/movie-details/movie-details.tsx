@@ -50,7 +50,6 @@ type MovieProps = {
 
 export default function MovieDetails() {
   const movie = useLoaderData() as MovieProps;
-  console.log(movie);
 
   const [value, setValue] = useState("1");
 

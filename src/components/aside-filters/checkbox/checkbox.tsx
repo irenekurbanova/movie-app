@@ -26,7 +26,7 @@ const CheckboxFilter = () => {
       dispatch({ type: "setInitialGenres", genres: initGenreArray });
     }
     fetchGenres();
-  }, []);
+  }, [dispatch]);
 
   function handleChange(event: React.SyntheticEvent, value: string[]) {
     dispatch({ type: "setCheckedGenre", name: value });

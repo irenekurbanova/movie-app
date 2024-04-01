@@ -15,31 +15,24 @@ const Movies = () => {
   const dispatchMovies = useMoviesDispatch();
 
   useEffect(() => {
-    async function loadInitialMovieList() {
-      try {
-        const favoriteMovieList = await getFavoriteMovieList(authenticationData.session_id);
-        dispatchMovies({ type: "setFavoritesList", favorites: favoriteMovieList });
-        dispatchFilters({ type: "setActiveFilter", filter: "select", active: true });
-        const popularMovieList = await getSortedMovies(filtersData.sortBy, moviesData.page);
-        dispatchMovies({ type: "setMovieList", data: popularMovieList });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    loadInitialMovieList();
-  }, []);
-
-  useEffect(() => {
     async function loadMovies() {
       let data;
       try {
         const favoriteMovieList = await getFavoriteMovieList(authenticationData.session_id);
         dispatchMovies({ type: "setFavoritesList", favorites: favoriteMovieList });
+        if (
+          !filtersData.activeFilter.select &&
+          !filtersData.activeFilter.search &&
+          !filtersData.activeFilter.checkbox &&
+          !filtersData.activeFilter.range
+        ) {
+          dispatchFilters({ type: "setActiveFilter", filter: "select", active: true });
+        }
         if (filtersData.activeFilter.select === true) {
           data = await getSortedMovies(filtersData.sortBy, moviesData.page);
           dispatchMovies({ type: "setMovieList", data: data });
         }
-        if (filtersData.activeFilter.search == true) {
+        if (filtersData.activeFilter.search === true) {
           data = await getMovieBySearch(filtersData.query, moviesData.page);
           dispatchMovies({ type: "setMovieList", data: data });
         }
@@ -50,9 +43,9 @@ const Movies = () => {
     loadMovies();
   }, [
     authenticationData.session_id,
+    dispatchFilters,
     dispatchMovies,
-    filtersData.activeFilter.search,
-    filtersData.activeFilter.select,
+    filtersData.activeFilter,
     filtersData.query,
     filtersData.sortBy,
     moviesData.page,
