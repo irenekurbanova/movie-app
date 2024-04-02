@@ -69,7 +69,7 @@ const Movies = () => {
       <Grid container spacing={2}>
         {moviesData.movieList.results.map((movie) => (
           <Grid item xs={12} sm={4} md={4} lg={4} key={movie.id} flexBasis={"100%"} display={"flex"}>
-            <Card className="grid transition-all ease-in-out delay-150  hover:scale-110 duration-300">
+            <Card className="grid transition-all ease-in-out delay-150  hover:scale-105 duration-300">
               <Link to={`movies/${movie.id}`} className="no-underline">
                 <CardMedia
                   width="500"
