@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import Header from "@/components/header/header";
 import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
 import { AuthenticationProvider } from "@/contexts/authentication/auth-context-provier";
-import Modal from "@/components/modal/modal";
+import Modal from "@/components/UI/modal/modal";
 import { useState } from "react";
 import AuthenticationStepper from "@/auth/auth-stepper";
 import { FiltersProvider } from "@/contexts/filters/filter-context-provider";

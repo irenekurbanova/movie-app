@@ -1,22 +1,12 @@
-import {
-  Box,
-  Grid,
-  Stack,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Typography,
-  Alert,
-  Snackbar,
-} from "@mui/material";
+import { Box, Grid, Stack, Card, CardMedia, CardContent, CardActions, Typography } from "@mui/material";
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getFavoriteMovieList, getMovieBySearch, getSortedMovies } from "@/api/movie-data";
 import { useAuthContext } from "@/contexts/authentication/auth-context";
-import FavoriteButton from "../buttons/favorite";
+import FavoriteButton from "../UI/buttons/favorite";
+import UserAlert from "../UI/alert/alert";
 
 const Movies = () => {
   const filtersData = useFiltersContext();
@@ -78,8 +68,8 @@ const Movies = () => {
     <Box component="div">
       <Grid container spacing={2}>
         {moviesData.movieList.results.map((movie) => (
-          <Grid item xs={4} key={movie.id}>
-            <Card className="flex flex-col transition-all ease-in-out delay-150  hover:scale-110 duration-300">
+          <Grid item xs={4} key={movie.id} flexBasis={"100%"} display={"flex"}>
+            <Card className="grid transition-all ease-in-out delay-150  hover:scale-110 duration-300">
               <Link to={`movies/${movie.id}`} className="no-underline">
                 <CardMedia
                   height="200"
@@ -110,11 +100,12 @@ const Movies = () => {
           </Grid>
         ))}
       </Grid>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          Фильм не добавлен в избранное. Проверьте соединение и попробуйте еще раз.
-        </Alert>
-      </Snackbar>
+      <UserAlert
+        open={open}
+        onClose={handleClose}
+        title="Ошибка"
+        message="Фильм не добавлен в избранное. Проверьте соединение и попробуйте еще раз."
+      />
     </Box>
   );
 };

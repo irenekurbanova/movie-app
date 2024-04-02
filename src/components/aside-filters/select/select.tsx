@@ -1,5 +1,5 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 import { useMoviesDispatch } from "@/contexts/movies/movie-context";
 
@@ -8,7 +8,7 @@ const SelectRatingData = {
   vote_average: "По рейтингу",
 };
 
-const SelectFilter = () => {
+const SelectFilter = memo(function SelectFilter() {
   const filtersData = useFiltersContext();
   const dispatchFilters = useFiltersDispatch();
   const dispatchMovies = useMoviesDispatch();
@@ -53,6 +53,6 @@ const SelectFilter = () => {
       </Select>
     </FormControl>
   );
-};
+});
 
 export default SelectFilter;

@@ -1,6 +1,6 @@
 import { IconButton, Paper, Typography, Box, Pagination } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Select from "./select/select";
+import SelectFilter from "./select/select";
 import RangeSlider from "./range-slider/range-slider";
 import CheckboxFilter from "./checkbox/checkbox";
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
@@ -29,7 +29,7 @@ const Filters = () => {
           <CloseIcon />
         </IconButton>
       </Box>
-      <Select />
+      <SelectFilter />
       <RangeSlider />
       <CheckboxFilter />
       <Pagination

@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Typography } from "@mui/material";
 import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
+import { memo } from "react";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -11,7 +12,7 @@ type MarksProps = {
   value: number;
 };
 
-const RangeSlider = () => {
+const RangeSlider = memo(function RangeSlider() {
   const filtersData = useFiltersContext();
   const dispatch = useFiltersDispatch();
 
@@ -47,6 +48,6 @@ const RangeSlider = () => {
       />
     </Box>
   );
-};
+});
 
 export default RangeSlider;

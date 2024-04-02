@@ -1,13 +1,13 @@
 import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material";
 import { getGenreList } from "@/api/movie-data";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
-const CheckboxFilter = () => {
+const CheckboxFilter = memo(function CheckboxFilter() {
   const filtersData = useFiltersContext();
   const dispatch = useFiltersDispatch();
   const labels = filtersData.genres.map((genre) => genre.name);
@@ -56,6 +56,6 @@ const CheckboxFilter = () => {
       }}
     />
   );
-};
+});
 
 export default CheckboxFilter;
