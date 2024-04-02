@@ -8,9 +8,10 @@ import { useAuthContext } from "@/contexts/authentication/auth-context";
 type FavoriteButtonProps = {
   isFavorite: boolean;
   id: string;
+  openAlert: () => void;
 };
 
-const FavoriteButton = ({ isFavorite, id }: FavoriteButtonProps) => {
+const FavoriteButton = ({ isFavorite, id, openAlert }: FavoriteButtonProps) => {
   const movieData = useMoviesContext();
   const dispatch = useMoviesDispatch();
   const authenticationData = useAuthContext();
@@ -30,8 +31,8 @@ const FavoriteButton = ({ isFavorite, id }: FavoriteButtonProps) => {
         dispatch({ type: "setFavoritesList", favorites: favoriteMoviesList });
       }
     } catch (error) {
-      console.error(error);
-      setFavorite((favorite) => !favorite);
+      setFavorite(false);
+      openAlert();
     }
   }
 

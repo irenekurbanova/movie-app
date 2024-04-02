@@ -36,13 +36,17 @@ export async function getFavoriteMovieList(account_id: string) {
 
 export async function addToFavorites(account_id: string, movie_id: string, action: string) {
   try {
-    TMBD_GET_REQUEST.post(`/account/${account_id}/favorite`, {
+    const response = await TMBD_GET_REQUEST.post(`/account/${account_id}/favorite`, {
       media_type: "movie",
       media_id: movie_id,
       favorite: action === "add" ? true : false,
     });
+
+    if (response.status === 200) {
+      return;
+    }
   } catch (error) {
-    console.error(error);
+    throw new Error("Someting went wrong");
   }
 }
 
@@ -92,14 +96,16 @@ export async function getSortedMovies(sortBy: string, page?: number) {
 export async function getMovieDetails(id: string) {
   try {
     const response = await TMBD_GET_REQUEST.get(`/movie/${id}?language=ru-RU`);
+
     if (response.status === 200) {
       return response.data;
     }
   } catch (error) {
     if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
-      console.log(error.status);
       console.error(error.response);
       // Do something with this error...
+      const { message } = error;
+      throw new Error(JSON.stringify(message));
     } else {
       console.error(error);
     }

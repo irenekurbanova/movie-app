@@ -1,8 +1,19 @@
-import { Box, Grid, Stack, Card, CardMedia, CardContent, CardActions, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getFavoriteMovieList, getMovieBySearch, getSortedMovies } from "@/api/movie-data";
 import { useAuthContext } from "@/contexts/authentication/auth-context";
 import FavoriteButton from "../buttons/favorite";
@@ -13,6 +24,18 @@ const Movies = () => {
   const moviesData = useMoviesContext();
   const authenticationData = useAuthContext();
   const dispatchMovies = useMoviesDispatch();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     async function loadMovies() {
@@ -76,6 +99,7 @@ const Movies = () => {
                 </CardContent>
                 <CardActions disableSpacing>
                   <FavoriteButton
+                    openAlert={handleOpen}
                     id={movie.id.toString()}
                     isFavorite={moviesData.favorites.results.some((favorite) => favorite.id === movie.id)}
                     key={movie.id}
@@ -86,6 +110,11 @@ const Movies = () => {
           </Grid>
         ))}
       </Grid>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Фильм не добавлен в избранное. Проверьте соединение и попробуйте еще раз.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

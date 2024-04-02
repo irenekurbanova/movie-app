@@ -15,11 +15,11 @@ export default function ErrorPage() {
         {error.data?.message && <Typography variant="caption">{error.data.message}</Typography>}
       </>
     );
-  } else {
+  } else if (error instanceof Error) {
     errorContent = (
       <>
         <Typography variant="h2">Oops!</Typography>
-        <Typography variant="h6">Something went wrong...</Typography>
+        <Typography variant="h6">{(error.message && error.message) || "Something went wrong..."}</Typography>
       </>
     );
   }
