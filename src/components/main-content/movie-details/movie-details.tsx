@@ -1,92 +1,84 @@
-import { Box, Card, CardMedia, CardContent, Tab, Typography, Stack, Button } from "@mui/material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Link, useLoaderData } from "react-router-dom";
+import { Box, Card, CardMedia, Tab, Grid } from "@mui/material";
+import { TabContext, TabList } from "@mui/lab";
+import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
-import MovieCredits from "@/components/main-content/movie-details/movie-credits";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CardTitle from "./title";
+import ActorsTab from "./tabs/actors";
+import CrewTab from "./tabs/crew";
+import OverviewTab from "./tabs/overview";
+import UserAlert from "@/components/UI/alert/alert";
 
 export default function MovieDetails() {
   const movie = useLoaderData() as MovieProps;
 
   const [value, setValue] = useState("1");
+  const [open, setOpen] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   return (
-    <Card sx={{ display: "flex", justifyContent: "stretch", maxHeight: "89vh" }}>
-      <CardMedia
-        component="img"
-        width={500}
-        sx={{ padding: 0 }}
-        image={`https://image.tmdb.org/t/p/original` + movie.poster_path}
-        alt={movie.title}
+    <Card>
+      <Grid container maxHeight="89vh">
+        <Grid item md={6}>
+          <CardMedia
+            component="img"
+            sx={{ padding: 0 }}
+            image={`https://image.tmdb.org/t/p/original` + movie.poster_path}
+            alt={movie.title}
+          />
+        </Grid>
+        <Grid item md={6} padding={2} display="flex" flexDirection="column" gap={2} maxHeight="89vh">
+          <CardTitle
+            title={movie.title}
+            release_date={movie.release_date}
+            id={movie.id}
+            tagline={movie.tagline}
+            onAlert={handleOpen}
+          />
+          <TabContext value={value}>
+            <Box borderBottom={1} borderColor="divider">
+              <TabList onChange={handleChange} aria-label="lab API tabs example">
+                <Tab label="Обзор" value="1" />
+                <Tab label="В ролях" value="2" />
+                <Tab label="Съемочная группа" value="3" />
+              </TabList>
+            </Box>
+            <Box sx={{ overflow: "auto" }}>
+              <OverviewTab
+                overview={movie.overview}
+                production_countries={movie.production_countries}
+                production_companies={movie.production_companies}
+                release_date={movie.release_date}
+                genres={movie.genres}
+                budget={movie.budget}
+                revenue={movie.revenue}
+                runtime={movie.runtime}
+              />
+              <CrewTab id={movie.id} />
+              <ActorsTab id={movie.id} />
+            </Box>
+          </TabContext>
+        </Grid>
+      </Grid>
+      <UserAlert
+        open={open}
+        onClose={handleClose}
+        title={"Ошибка"}
+        message={"Фильм не добавлен в избранное. Проверьте соединение и попробуйте еще раз."}
       />
-      <CardContent sx={{ flex: 1, padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Typography variant="h6" fontWeight={600}>
-            {movie.title}
-          </Typography>
-          <Typography variant="overline" className="underline underline-offset-4 decoration-white">
-            {movie.release_date.slice(0, 4)}
-          </Typography>
-        </Stack>
-        <Link to="/" className=" text-white no-underline">
-          <Button className="flex align-middle gap-3 normal-case">
-            <ArrowBackIcon />
-            <Typography>Вернуться назад</Typography>
-          </Button>
-        </Link>
-        {movie.tagline.length > 0 && <Typography className="text-white text-sm italic ">{movie.tagline}</Typography>}
-        <TabContext value={value}>
-          <Box borderBottom={1} borderColor="divider">
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Обзор" value="1" />
-              <Tab label="В ролях" value="2" />
-              <Tab label="Съемочная группа" value="3" />
-            </TabList>
-          </Box>
-          <Box sx={{ overflow: "auto" }}>
-            <TabPanel value="1" sx={{ p: 0, display: "flex", flexDirection: "column", flexBasis: 1, gap: 2 }}>
-              <Typography>{movie.overview}</Typography>
-              <Stack display="flex" maxWidth="50%" gap={3}>
-                <Box display="flex" alignItems="center">
-                  <Typography className="text-sm text-zinc-200" width={"20%"}>
-                    Страна
-                  </Typography>
-                  <Typography className="text-sm">{movie.production_countries[0].name}</Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Typography className="text-sm text-zinc-200" width={"20%"}>
-                    Жанр
-                  </Typography>
-                  <Typography className="text-sm">{movie.genres.map((genre) => genre.name + "," + " ")}</Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Typography className="text-sm text-zinc-200" width={"20%"}>
-                    Сборы
-                  </Typography>
-                  <Typography className="text-sm">{movie.revenue}$</Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Typography className="text-sm text-zinc-200" width={"20%"}>
-                    Возраст
-                  </Typography>
-                  <Typography className="text-sm">{movie.adult ? "18+" : "6+"}</Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Typography className="text-sm text-zinc-200" width={"20%"}>
-                    Время
-                  </Typography>
-                  <Typography className="text-sm">{movie.runtime} минут</Typography>
-                </Box>
-              </Stack>
-            </TabPanel>
-            <MovieCredits id={movie.id} />
-          </Box>
-        </TabContext>
-      </CardContent>
     </Card>
   );
 }

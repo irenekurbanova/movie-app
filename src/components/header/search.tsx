@@ -11,6 +11,7 @@ const Search = () => {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target.value.length) {
+      dispatchFilters({ type: "setActiveFilter", filter: "select", active: true });
       return;
     }
     setSearchValue(event.target.value);

@@ -89,12 +89,7 @@ const Movies = () => {
                   </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                  <FavoriteButton
-                    openAlert={handleOpen}
-                    id={movie.id.toString()}
-                    isFavorite={moviesData.favorites.results.some((favorite) => favorite.id === movie.id)}
-                    key={movie.id}
-                  />
+                  <FavoriteButton openAlert={handleOpen} id={movie.id} key={movie.id} />
                 </CardActions>
               </Stack>
             </Card>
