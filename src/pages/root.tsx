@@ -1,6 +1,6 @@
 import { MovieProvider } from "@/contexts/movies/movie-context-provider";
 import { getMovieDetails } from "@/api/movie-data";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "@/components/header/header";
 import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
@@ -42,19 +42,14 @@ export default function Root() {
     <AuthenticationProvider>
       <FiltersProvider>
         <MovieProvider>
-          <Container
-            maxWidth="xl"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-            }}
-          >
-            <Modal open={open} close={closeModal}>
-              <AuthenticationStepper closeModal={closeModal} />
-            </Modal>
-            <Header openModal={openModal} />
-            <Outlet />
+          <Container maxWidth="xl">
+            <Box display="flex" flexDirection="column" gap="16px">
+              <Modal open={open} close={closeModal}>
+                <AuthenticationStepper closeModal={closeModal} />
+              </Modal>
+              <Header openModal={openModal} />
+              <Outlet />
+            </Box>
           </Container>
         </MovieProvider>
       </FiltersProvider>

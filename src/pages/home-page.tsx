@@ -26,20 +26,11 @@ const HomePage = () => {
     <>
       {!authenticationData.isLoggedIn && null}
       {authenticationData.isLoggedIn && (
-        <Grid container sx={{ flex: 1, minHeight: "90vh" }} alignItems="stretch" spacing={2} overflow="auto">
+        <Grid container flex={1} minHeight="90vh" alignItems="stretch" spacing={2} overflow="auto">
           <Grid item xs={12} md={3} display="flex">
             <Filters />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={9}
-            padding={3}
-            sx={{ maxHeight: "90vh" }}
-            display="flex"
-            justifyContent="center"
-            overflow="auto"
-          >
+          <Grid item xs={12} md={9} padding={3} maxHeight="90vh" display="flex" justifyContent="center" overflow="auto">
             <Movies />
           </Grid>
         </Grid>

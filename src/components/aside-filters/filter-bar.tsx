@@ -21,8 +21,8 @@ const Filters = () => {
 
   return (
     <Paper sx={{ flex: 1, p: 2, display: "flex", flexDirection: "column", gap: 4 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h6" sx={{ fontWeight: "medium" }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6" fontWeight="medium">
           Фильтры
         </Typography>
         <IconButton onClick={clearFiltersHandler}>

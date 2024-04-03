@@ -1,5 +1,5 @@
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function ErrorPage() {
   const error = useRouteError();
@@ -25,19 +25,18 @@ export default function ErrorPage() {
   }
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-      }}
-    >
-      {errorContent}
+    <Container maxWidth="sm">
+      <Box
+        minHeight="100vh"
+        display="flex"
+        flexDirection="column"
+        gap="16px"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+      >
+        {errorContent}
+      </Box>
     </Container>
   );
 }

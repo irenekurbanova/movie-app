@@ -32,7 +32,7 @@ const RangeSlider = memo(function RangeSlider() {
   };
 
   return (
-    <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 5 }}>
+    <Box width="100%" display="flex" flexDirection="column" gap={5}>
       <Typography variant="subtitle1">Год релиза:</Typography>
       <Slider
         getAriaLabel={() => "Temperature range"}

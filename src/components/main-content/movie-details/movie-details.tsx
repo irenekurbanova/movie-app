@@ -18,7 +18,8 @@ export default function MovieDetails() {
     <Card sx={{ display: "flex", justifyContent: "stretch", maxHeight: "89vh" }}>
       <CardMedia
         component="img"
-        sx={{ width: 500, padding: 0 }}
+        width={500}
+        sx={{ padding: 0 }}
         image={`https://image.tmdb.org/t/p/original` + movie.poster_path}
         alt={movie.title}
       />
@@ -39,7 +40,7 @@ export default function MovieDetails() {
         </Link>
         {movie.tagline.length > 0 && <Typography className="text-white text-sm italic ">{movie.tagline}</Typography>}
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Box borderBottom={1} borderColor="divider">
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="Обзор" value="1" />
               <Tab label="В ролях" value="2" />
