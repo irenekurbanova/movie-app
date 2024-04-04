@@ -1,14 +1,15 @@
 import { InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useFiltersDispatch } from "@/contexts/filters/filter-context";
+import { ChangeEvent, memo, useEffect, useState } from "react";
+import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 
-const Search = () => {
-  const [searchValue, setSearchValue] = useState("");
+const Search = memo(function Search() {
   const moviesData = useMoviesContext();
+  const filtersData = useFiltersContext();
   const dispatchFilters = useFiltersDispatch();
   const dispatchMovies = useMoviesDispatch();
+  const [searchValue, setSearchValue] = useState(filtersData.query);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target.value.length) {
@@ -33,6 +34,6 @@ const Search = () => {
       <InputBase required sx={{ ml: 1, flex: 1 }} placeholder="Поиск по названию" onChange={handleChange} />
     </Paper>
   );
-};
+});
 
 export default Search;
