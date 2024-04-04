@@ -8,7 +8,7 @@ import { useAuthContext } from "@/contexts/authentication/auth-context";
 import FavoriteButton from "../UI/buttons/favorite";
 import UserAlert from "../UI/alert/alert";
 
-const Movies = () => {
+const Movies = function () {
   const filtersData = useFiltersContext();
   const dispatchFilters = useFiltersDispatch();
   const moviesData = useMoviesContext();

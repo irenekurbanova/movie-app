@@ -1,11 +1,18 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { createBrowserRouter, LoaderFunction, RouterProvider } from "react-router-dom";
-import { movieLoader } from "./pages/root";
-import Root from "./pages/root";
+import {
+  ActionFunctionArgs,
+  createBrowserRouter,
+  LoaderFunction,
+  ParamParseKey,
+  Params,
+  RouterProvider,
+} from "react-router-dom";
+import { Root } from "./pages/root";
 import ErrorPage from "./pages/error-page";
 import MovieDetails from "./pages/movie-details-page";
 import { StyledEngineProvider } from "@mui/material/styles";
 import HomePage from "./pages/home-page";
+import { getMovieDetails } from "./api/movie-data";
 
 const darkTheme = createTheme({
   palette: {
@@ -42,6 +49,22 @@ const darkTheme = createTheme({
     },
   },
 });
+
+const Paths = {
+  movieDetails: "movies/:movieId",
+} as const;
+
+interface MovieLoaderProps extends ActionFunctionArgs {
+  params: Params<ParamParseKey<typeof Paths.movieDetails>>;
+}
+
+async function movieLoader({ params }: MovieLoaderProps) {
+  if (params.movieId) {
+    const movie = await getMovieDetails(params.movieId);
+
+    return movie;
+  } else return null;
+}
 
 const router = createBrowserRouter([
   {

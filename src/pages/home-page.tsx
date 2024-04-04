@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { Grid } from "@mui/material";
 import { useEffect } from "react";
 
-const HomePage = () => {
+const HomePage = function HomePage() {
   const authenticationData = useAuthContext();
   const dispatch = useAuthDispatch();
   const token = Cookies.get("token");

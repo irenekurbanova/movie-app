@@ -68,9 +68,9 @@ export async function getGenreList() {
   }
 }
 
-export async function getSortedMovies(sortBy: string, page?: number) {
+export async function getSortedMovies(sortBy: string, page: number) {
   let pageNumber;
-  if (!page) {
+  if (page === 0) {
     pageNumber = 1;
   } else pageNumber = page;
   let url;

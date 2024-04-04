@@ -24,9 +24,9 @@ export type MovieDataProps = {
 };
 
 const initialMovieData: MovieDataProps = {
-  movieList: { page: 1, results: [], total_pages: 0, total_results: 0 },
-  favorites: { page: 1, results: [], total_pages: 0, total_results: 0 },
-  page: 1,
+  movieList: { page: 0, results: [], total_pages: 0, total_results: 0 },
+  favorites: { page: 0, results: [], total_pages: 0, total_results: 0 },
+  page: 0,
 };
 
 const MoviesContext = createContext<MovieDataProps>(initialMovieData);
