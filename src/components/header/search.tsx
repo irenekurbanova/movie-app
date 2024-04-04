@@ -2,10 +2,11 @@ import { InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useFiltersDispatch } from "@/contexts/filters/filter-context";
-import { useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState("");
+  const moviesData = useMoviesContext();
   const dispatchFilters = useFiltersDispatch();
   const dispatchMovies = useMoviesDispatch();
 
@@ -21,10 +22,10 @@ const Search = () => {
   useEffect(() => {
     const getQuery = setTimeout(() => {
       dispatchFilters({ type: "setQuery", query: searchValue });
-      dispatchMovies({ type: "setPage", page: 1 });
+      dispatchMovies({ type: "setPage", page: moviesData.page });
     }, 1500);
     return () => clearTimeout(getQuery);
-  }, [dispatchFilters, dispatchMovies, searchValue]);
+  }, [dispatchFilters, dispatchMovies, moviesData.page, searchValue]);
 
   return (
     <Paper component="form" sx={{ flex: 1, padding: "4px", display: "flex", alignItems: "center" }}>

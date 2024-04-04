@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
 import Search from "./search";
 import { useAuthContext } from "@/contexts/authentication/auth-context";
-import { useEffect, useState } from "react";
 
 type HeaderProps = {
   openModal: () => void;
@@ -13,13 +12,6 @@ type HeaderProps = {
 const Header = ({ openModal }: HeaderProps) => {
   const { pathname } = useLocation();
   const isAutenticated = useAuthContext();
-  const [showSearch, setShowSearch] = useState(true);
-
-  useEffect(() => {
-    if (pathname.includes("movies")) {
-      setShowSearch(false);
-    }
-  }, [pathname]);
 
   return (
     <Box minWidth="100%" display="flex">
@@ -52,7 +44,7 @@ const Header = ({ openModal }: HeaderProps) => {
               display="flex"
               justifyContent="space-between"
             >
-              {isAutenticated.isLoggedIn && showSearch && <Search />}
+              {isAutenticated.isLoggedIn && !pathname.includes("movies") && <Search />}
             </Grid>
             <Grid item xs="auto" sm="auto" md="auto" lg="auto" order={{ xs: 2, sm: 2, md: 3, lg: 3 }} marginLeft="auto">
               <IconButton
