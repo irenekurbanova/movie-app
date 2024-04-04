@@ -16,7 +16,7 @@ const Header = ({ openModal }: HeaderProps) => {
   const [showSearch, setShowSearch] = useState(true);
 
   useEffect(() => {
-    if (!pathname.includes("movies")) {
+    if (pathname.includes("movies")) {
       setShowSearch(false);
     }
   }, [pathname]);
