@@ -1,15 +1,15 @@
 import { InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { ChangeEvent, memo, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
 
-const Search = memo(function Search() {
-  const moviesData = useMoviesContext();
-  const filtersData = useFiltersContext();
+const Search = function Search() {
+  const { page } = useMoviesContext();
+  const { query } = useFiltersContext();
   const dispatchFilters = useFiltersDispatch();
   const dispatchMovies = useMoviesDispatch();
-  const [searchValue, setSearchValue] = useState(filtersData.query);
+  const [searchValue, setSearchValue] = useState(query);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target.value.length) {
@@ -23,10 +23,10 @@ const Search = memo(function Search() {
   useEffect(() => {
     const getQuery = setTimeout(() => {
       dispatchFilters({ type: "setQuery", query: searchValue });
-      dispatchMovies({ type: "setPage", page: moviesData.page });
+      dispatchMovies({ type: "setPage", page: page });
     }, 1500);
     return () => clearTimeout(getQuery);
-  }, [dispatchFilters, dispatchMovies, moviesData.page, searchValue]);
+  }, [dispatchFilters, dispatchMovies, page, searchValue]);
 
   return (
     <Paper component="form" sx={{ flex: 1, padding: "4px", display: "flex", alignItems: "center" }}>
@@ -34,6 +34,6 @@ const Search = memo(function Search() {
       <InputBase required sx={{ ml: 1, flex: 1 }} placeholder="Поиск по названию" onChange={handleChange} />
     </Paper>
   );
-});
+};
 
 export default Search;

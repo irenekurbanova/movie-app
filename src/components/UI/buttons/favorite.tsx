@@ -11,16 +11,16 @@ type FavoriteButtonProps = {
 };
 
 const FavoriteButton = ({ id, openAlert }: FavoriteButtonProps) => {
-  const movieData = useMoviesContext();
+  const { favorites } = useMoviesContext();
   const dispatch = useMoviesDispatch();
   const authenticationData = useAuthContext();
-  const isFavorite = movieData.favorites.results.some((favorite) => favorite.id === id);
+  const isFavorite = favorites.results.some((favorite) => favorite.id === id);
   const [favorite, setFavorite] = useState(isFavorite);
 
   async function addToFavoriteHandler() {
     setFavorite((favorite) => !favorite);
     try {
-      const currentMovieIsFavorite = movieData.favorites.results.some((favorite) => favorite.id === id);
+      const currentMovieIsFavorite = favorites.results.some((favorite) => favorite.id === id);
       if (currentMovieIsFavorite) {
         await addToFavorites(authenticationData.session_id, id.toString(), "delete");
         const favoriteMoviesList = await getFavoriteMovieList(authenticationData.session_id);

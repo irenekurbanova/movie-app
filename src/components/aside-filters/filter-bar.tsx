@@ -8,7 +8,7 @@ import { useFiltersDispatch } from "@/contexts/filters/filter-context";
 
 const Filters = () => {
   const dispatch = useFiltersDispatch();
-  const movieData = useMoviesContext();
+  const { page, movieList } = useMoviesContext();
   const dispatchMovies = useMoviesDispatch();
 
   function handlePaginationChange(event: React.ChangeEvent<unknown>, value: number) {
@@ -33,9 +33,9 @@ const Filters = () => {
       <RangeSlider />
       <CheckboxFilter />
       <Pagination
-        page={movieData.movieList.page}
+        page={page}
         siblingCount={0}
-        count={movieData.movieList.total_pages < 500 ? movieData.movieList.total_pages : 500}
+        count={movieList.total_pages < 500 ? movieList.total_pages : 500}
         sx={{ marginTop: "auto" }}
         onChange={handlePaginationChange}
       />

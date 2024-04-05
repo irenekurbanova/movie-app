@@ -30,7 +30,16 @@ const HomePage = function HomePage() {
           <Grid item xs={12} md={3} display="flex">
             <Filters />
           </Grid>
-          <Grid item xs={12} md={9} padding={3} maxHeight="90vh" display="flex" justifyContent="center" overflow="auto">
+          <Grid
+            item
+            xs={12}
+            md={"auto"}
+            maxHeight="90vh"
+            display="flex"
+            alignContent="center"
+            justifyContent="center"
+            overflow="auto"
+          >
             <Movies />
           </Grid>
         </Grid>

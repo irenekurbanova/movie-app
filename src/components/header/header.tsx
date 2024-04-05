@@ -4,12 +4,13 @@ import { Link, useLocation } from "react-router-dom";
 import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
 import Search from "./search";
 import { useAuthContext } from "@/contexts/authentication/auth-context";
+import { memo } from "react";
 
 type HeaderProps = {
   openModal: () => void;
 };
 
-const Header = ({ openModal }: HeaderProps) => {
+const Header = memo(function Header({ openModal }: HeaderProps) {
   const { pathname } = useLocation();
   const isAutenticated = useAuthContext();
 
@@ -64,6 +65,6 @@ const Header = ({ openModal }: HeaderProps) => {
       </AppBar>
     </Box>
   );
-};
+});
 
 export default Header;

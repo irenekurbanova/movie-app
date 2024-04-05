@@ -65,7 +65,7 @@ const Movies = function () {
   ]);
 
   return (
-    <Box component="div">
+    <>
       <Grid container spacing={2}>
         {moviesData.movieList.results.map((movie) => (
           <Grid item xs={12} sm={4} md={4} lg={4} key={movie.id} flexBasis={"100%"} display={"flex"}>
@@ -102,7 +102,7 @@ const Movies = function () {
         title="Ошибка"
         message="Фильм не добавлен в избранное. Проверьте соединение и попробуйте еще раз."
       />
-    </Box>
+    </>
   );
 };
 
