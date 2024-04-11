@@ -1,4 +1,5 @@
 import FavoriteButton from "@/components/UI/buttons/favorite";
+import { useAppSelector } from "@/store/global-store";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Stack, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -12,6 +13,7 @@ type CardTitleProps = {
 };
 
 const CardTitle = ({ title, release_date, id, tagline, onAlert }: CardTitleProps) => {
+  const moviesData = useAppSelector((state) => state.movies);
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -23,7 +25,11 @@ const CardTitle = ({ title, release_date, id, tagline, onAlert }: CardTitleProps
             {release_date.slice(0, 4)}
           </Typography>
         </Stack>
-        <FavoriteButton id={id} openAlert={onAlert} />
+        <FavoriteButton
+          id={id}
+          openAlert={onAlert}
+          isFavorite={moviesData.favorites.results.some((favorite) => favorite.id === id)}
+        />
       </Stack>
       {tagline.length > 0 && <Typography className="text-white text-sm italic ">{tagline}</Typography>}
       <Stack>
