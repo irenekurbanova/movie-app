@@ -1,8 +1,6 @@
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
-import { Typography } from "@mui/material";
-import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
-import { memo } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { Typography, Box, Slider } from "@mui/material";
+import { setReleaseYear } from "@/store/filter-slice";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -12,14 +10,14 @@ type MarksProps = {
   value: number;
 };
 
-const RangeSlider = memo(function RangeSlider() {
-  const filtersData = useFiltersContext();
-  const dispatch = useFiltersDispatch();
+const RangeSlider = function RangeSlider() {
+  const releaseYear = useAppSelector((state) => state.filters.releaseYear);
+  const dispatch = useAppDispatch();
 
   const marks = (): MarksProps[] => {
     const marksArray = [];
-    let minStep = filtersData.releaseYear.min;
-    while (minStep <= filtersData.releaseYear.max) {
+    let minStep = releaseYear.min;
+    while (minStep <= releaseYear.max) {
       marksArray.push({ value: minStep });
       minStep += 8;
     }
@@ -27,8 +25,8 @@ const RangeSlider = memo(function RangeSlider() {
   };
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    dispatch({ type: "setReleaseYear", yearRange: newValue as number[] });
-    dispatch({ type: "setActiveFilter", filter: "range", active: true });
+    dispatch(setReleaseYear(newValue as number[]));
+    // setActiveFilter("range");
   };
 
   return (
@@ -39,15 +37,15 @@ const RangeSlider = memo(function RangeSlider() {
         step={1}
         shiftStep={8}
         marks={marks()}
-        min={filtersData.releaseYear.min}
-        max={filtersData.releaseYear.max}
-        value={filtersData.releaseYear.pickedRange}
+        min={releaseYear.min}
+        max={releaseYear.max}
+        value={releaseYear.pickedRange}
         onChange={(event, newValue) => handleChange(event, newValue)}
         valueLabelDisplay="on"
         getAriaValueText={valuetext}
       />
     </Box>
   );
-});
+};
 
 export default RangeSlider;

@@ -1,34 +1,30 @@
 import { IconButton } from "@mui/material";
 import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
-import { addToFavorites, getFavoriteMovieList } from "@/api/movie-data";
-import { useAuthContext } from "@/contexts/authentication/auth-context";
+import { addToFavorites } from "@/api/movie-data";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { fetchFavoriteMovies } from "@/store/movie-slice";
 
 type FavoriteButtonProps = {
   id: number;
   openAlert: () => void;
+  isFavorite: boolean;
 };
 
-const FavoriteButton = ({ id, openAlert }: FavoriteButtonProps) => {
-  const { favorites } = useMoviesContext();
-  const dispatch = useMoviesDispatch();
-  const authenticationData = useAuthContext();
-  const isFavorite = favorites.results.some((favorite) => favorite.id === id);
+const FavoriteButton = ({ id, isFavorite, openAlert }: FavoriteButtonProps) => {
+  const session_id = useAppSelector((state) => state.authentication.session_id);
+  const dispatch = useAppDispatch();
   const [favorite, setFavorite] = useState(isFavorite);
 
   async function addToFavoriteHandler() {
     setFavorite((favorite) => !favorite);
     try {
-      const currentMovieIsFavorite = favorites.results.some((favorite) => favorite.id === id);
-      if (currentMovieIsFavorite) {
-        await addToFavorites(authenticationData.session_id, id.toString(), "delete");
-        const favoriteMoviesList = await getFavoriteMovieList(authenticationData.session_id);
-        dispatch({ type: "setFavoritesList", favorites: favoriteMoviesList });
+      if (isFavorite) {
+        await addToFavorites(session_id, id.toString(), "delete");
+        dispatch(fetchFavoriteMovies(session_id));
       } else {
-        await addToFavorites(authenticationData.session_id, id.toString(), "add");
-        const favoriteMoviesList = await getFavoriteMovieList(authenticationData.session_id);
-        dispatch({ type: "setFavoritesList", favorites: favoriteMoviesList });
+        await addToFavorites(session_id, id.toString(), "add");
+        dispatch(fetchFavoriteMovies(session_id));
       }
     } catch (error) {
       setFavorite((fav) => !fav);

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { Paper, Typography, MobileStepper, Button, useTheme } from "@mui/material";
-import { useAuthDispatch } from "@/contexts/authentication/auth-context";
 import { isValidEmail } from "@/utilities/helpers";
 import Input from "./input-form";
 import Cookies from "js-cookie";
-import { getAccountID } from "@/api/authentication";
+import { setEmail, setToken, setIsLoggedIn } from "@/store/auth-slice";
+import { fetchAccountID } from "@/store/auth-slice";
 import { API_ACCESS_TOKEN } from "@/api/config";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
 
 type AuthenticationStepperProps = {
   closeModal: () => void;
@@ -27,11 +28,12 @@ const AuthenticationStepper = ({ closeModal }: AuthenticationStepperProps) => {
   const [activeStep, setActiveStep] = useState(0);
   const [inputValue, setInputValue] = useState({ email: "", token: API_ACCESS_TOKEN });
 
-  const dispatch = useAuthDispatch();
+  const dispatch = useAppDispatch();
+  const accountID = useAppSelector((state) => state.authentication.session_id);
 
   const handleNext = () => {
     if (isValidEmail(inputValue.email)) {
-      dispatch({ type: "setEmail", email: inputValue.email });
+      dispatch(setEmail(inputValue.email));
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
@@ -40,22 +42,18 @@ const AuthenticationStepper = ({ closeModal }: AuthenticationStepperProps) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleComplete = () => {
-    dispatch({ type: "setToken", token: inputValue.token });
-    dispatch({ type: "setIsLoggedIn", isLoggedIn: true });
+  const handleComplete = async () => {
+    dispatch(setToken(inputValue.token));
+    dispatch(setIsLoggedIn(true));
 
+    Cookies.set("accountID", accountID);
     Cookies.set("token", inputValue.token);
     Cookies.set("email", inputValue.email);
     closeModal();
   };
 
   useEffect(() => {
-    async function getAccount() {
-      const account = await getAccountID();
-      dispatch({ type: "setSessionId", id: account.id });
-      Cookies.set("accountID", account.id);
-    }
-    getAccount();
+    dispatch(fetchAccountID());
   }, [dispatch]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {

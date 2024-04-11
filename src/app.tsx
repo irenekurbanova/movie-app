@@ -29,7 +29,7 @@ const darkTheme = createTheme({
           "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
             borderRadius: 8,
             backgroundColor: "#6b6b6b",
-            minHeight: 12,
+            minHeight: 24,
             border: "3px solid #2b2b2b",
           },
           "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus": {

@@ -1,36 +1,27 @@
 import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material";
-import { getGenreList } from "@/api/movie-data";
-import { memo, useEffect } from "react";
-import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { setCheckedGenre, fetchInitialGenresList, setPickedGenres } from "@/store/filter-slice";
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
-const CheckboxFilter = memo(function CheckboxFilter() {
-  const filtersData = useFiltersContext();
-  const dispatch = useFiltersDispatch();
-  const labels = filtersData.genres.map((genre) => genre.name);
+const CheckboxFilter = function CheckboxFilter() {
+  const genres = useAppSelector((state) => state.filters.genres);
+  const dispatch = useAppDispatch();
+  const labels = genres.map((genre) => genre.name);
 
   useEffect(() => {
-    async function fetchGenres() {
-      const data = await getGenreList();
-
-      const initGenreArray = data.genres.map((genre: { id: number; name: string }) => {
-        return {
-          id: genre.id.toString(),
-          name: genre.name,
-          checked: false,
-        };
-      });
-      dispatch({ type: "setInitialGenres", genres: initGenreArray });
+    if (!genres.length) {
+      dispatch(fetchInitialGenresList());
     }
-    fetchGenres();
-  }, [dispatch]);
+  }, [dispatch, genres.length]);
 
   function handleChange(event: React.SyntheticEvent, value: string[]) {
-    dispatch({ type: "setCheckedGenre", name: value });
-    dispatch({ type: "setActiveFilter", filter: "checkbox", active: true });
+    dispatch(setCheckedGenre(value));
+    dispatch(setPickedGenres());
+    // dispatch(setActiveFilter("checkbox"));
   }
 
   return (
@@ -41,6 +32,7 @@ const CheckboxFilter = memo(function CheckboxFilter() {
       id="size-small-standard-multi"
       size="small"
       options={labels}
+      value={genres.filter((genre) => genre.checked).map((genre) => genre.name)}
       getOptionLabel={(option) => option}
       onChange={handleChange}
       renderOption={(props, option, { selected }) => {
@@ -56,6 +48,6 @@ const CheckboxFilter = memo(function CheckboxFilter() {
       }}
     />
   );
-});
+};
 
 export default CheckboxFilter;

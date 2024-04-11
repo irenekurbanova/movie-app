@@ -1,17 +1,17 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { useState, memo } from "react";
-import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
-import { useMoviesDispatch } from "@/contexts/movies/movie-context";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { setSortBy } from "@/store/filter-slice";
+import { setPage } from "@/store/movie-slice";
 
 const SelectRatingData = {
   popularity: "По популярности",
   vote_average: "По рейтингу",
 };
 
-const SelectFilter = memo(function SelectFilter() {
-  const filtersData = useFiltersContext();
-  const dispatchFilters = useFiltersDispatch();
-  const dispatchMovies = useMoviesDispatch();
+const SelectFilter = function SelectFilter() {
+  const filtersData = useAppSelector((state) => state.filters);
+  const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
 
@@ -24,9 +24,12 @@ const SelectFilter = memo(function SelectFilter() {
   };
 
   function handleSelectChange(event: SelectChangeEvent) {
-    dispatchFilters({ type: "setSortBy", sortBy: event.target.value });
-    dispatchFilters({ type: "setActiveFilter", filter: "select", active: true });
-    dispatchMovies({ type: "setPage", page: 1 });
+    dispatch(setSortBy(event.target.value));
+    // if (!filtersData.activeFilter.select) {
+    //   dispatch(setActiveFilter("select"));
+    //   dispatch(setActiveFilter("search"));
+    // }
+    dispatch(setPage(1));
   }
 
   return (
@@ -53,6 +56,6 @@ const SelectFilter = memo(function SelectFilter() {
       </Select>
     </FormControl>
   );
-});
+};
 
 export default SelectFilter;

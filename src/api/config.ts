@@ -7,8 +7,8 @@ const TMBD_GET_REQUEST = axios.create({
   baseURL: API_URL,
   headers: {
     accept: "application/json",
-    "content-type": "application/json",
     Authorization: `Bearer ${API_ACCESS_TOKEN}`,
+    "content-type": "application/json",
   },
 });
 

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export function isValidEmail(email: string) {
   return /\S+@\S+\.\S+/.test(email);
 }
@@ -23,3 +25,17 @@ export const USDollar = new Intl.NumberFormat("ru-RU", {
   style: "currency",
   currency: "USD",
 });
+
+export const useDebounce = (value: string) => {
+  const [debouncedValue, setDebouncedValue] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, 1500);
+
+    return () => clearTimeout(handler);
+  }, [value]);
+
+  return debouncedValue;
+};

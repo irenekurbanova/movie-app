@@ -8,5 +8,6 @@ export async function getAccountID() {
     }
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }

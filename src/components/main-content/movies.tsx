@@ -1,71 +1,52 @@
 import { Box, Grid, Stack, Card, CardMedia, CardContent, CardActions, Typography } from "@mui/material";
-import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
-import { useFiltersContext, useFiltersDispatch } from "@/contexts/filters/filter-context";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getFavoriteMovieList, getMovieBySearch, getSortedMovies } from "@/api/movie-data";
-import { useAuthContext } from "@/contexts/authentication/auth-context";
+import { useCallback, useEffect, useState } from "react";
 import FavoriteButton from "../UI/buttons/favorite";
 import UserAlert from "../UI/alert/alert";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { fetchFavoriteMovies, fetchMoviesByFilters } from "@/store/movie-slice";
 
 const Movies = function () {
-  const filtersData = useFiltersContext();
-  const dispatchFilters = useFiltersDispatch();
-  const moviesData = useMoviesContext();
-  const authenticationData = useAuthContext();
-  const dispatchMovies = useMoviesDispatch();
+  const filtersData = useAppSelector((state) => state.filters);
+  const moviesData = useAppSelector((state) => state.movies);
+  const account_id = useAppSelector((state) => state.authentication.session_id);
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = useCallback(function handleClose(event?: React.SyntheticEvent | Event, reason?: string) {
     if (reason === "clickaway") {
       return;
     }
     setOpen(false);
-  };
+  }, []);
 
-  const handleOpen = () => {
+  const handleOpen = useCallback(function handleOpen() {
     setOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
-    async function loadMovies() {
-      let data;
-      try {
-        const favoriteMovieList = await getFavoriteMovieList(authenticationData.session_id);
-        dispatchMovies({ type: "setFavoritesList", favorites: favoriteMovieList });
-        if (
-          !filtersData.activeFilter.select &&
-          !filtersData.activeFilter.search &&
-          !filtersData.activeFilter.checkbox &&
-          !filtersData.activeFilter.range
-        ) {
-          dispatchFilters({ type: "setActiveFilter", filter: "select", active: true });
-        }
-        if (filtersData.activeFilter.select === true) {
-          data = await getSortedMovies(filtersData.sortBy, moviesData.page);
-          dispatchMovies({ type: "setMovieList", data: data });
-        }
-        if (filtersData.activeFilter.search === true) {
-          data = await getMovieBySearch(filtersData.query, moviesData.page);
-          dispatchMovies({ type: "setMovieList", data: data });
-        }
-      } catch (error) {
-        console.error(error);
-      }
+    dispatch(fetchFavoriteMovies(account_id));
+    if (!filtersData.searchActive) {
+      const data = {
+        page: moviesData.page,
+        sortby: filtersData.sortBy,
+        range: filtersData.releaseYear.pickedRange,
+        genres: filtersData.pickedGenres,
+      };
+      dispatch(fetchMoviesByFilters(data));
     }
-    loadMovies();
   }, [
-    authenticationData.session_id,
-    dispatchFilters,
-    dispatchMovies,
-    filtersData.activeFilter,
-    filtersData.query,
+    account_id,
+    dispatch,
+    filtersData.pickedGenres,
+    filtersData.releaseYear.pickedRange,
+    filtersData.searchActive,
     filtersData.sortBy,
     moviesData.page,
   ]);
 
   return (
-    <>
+    <Box component="div" flex={1}>
       <Grid container spacing={2}>
         {moviesData.movieList.results.map((movie) => (
           <Grid item xs={12} sm={4} md={4} lg={4} key={movie.id} flexBasis={"100%"} display={"flex"}>
@@ -89,7 +70,12 @@ const Movies = function () {
                   </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                  <FavoriteButton openAlert={handleOpen} id={movie.id} key={movie.id} />
+                  <FavoriteButton
+                    openAlert={handleOpen}
+                    id={movie.id}
+                    isFavorite={moviesData.favorites.results.some((favorite) => favorite.id === movie.id)}
+                    key={movie.id}
+                  />
                 </CardActions>
               </Stack>
             </Card>
@@ -102,7 +88,7 @@ const Movies = function () {
         title="Ошибка"
         message="Фильм не добавлен в избранное. Проверьте соединение и попробуйте еще раз."
       />
-    </>
+    </Box>
   );
 };
 

@@ -3,20 +3,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import SelectFilter from "./select/select";
 import RangeSlider from "./range-slider/range-slider";
 import CheckboxFilter from "./checkbox/checkbox";
-import { useMoviesContext, useMoviesDispatch } from "@/contexts/movies/movie-context";
-import { useFiltersDispatch } from "@/contexts/filters/filter-context";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { clearFilters } from "@/store/filter-slice";
+import { setPage } from "@/store/movie-slice";
 
 const Filters = () => {
-  const dispatch = useFiltersDispatch();
-  const { page, movieList } = useMoviesContext();
-  const dispatchMovies = useMoviesDispatch();
+  const movieData = useAppSelector((state) => state.movies);
+  const dispatch = useAppDispatch();
 
   function handlePaginationChange(event: React.ChangeEvent<unknown>, value: number) {
-    dispatchMovies({ type: "setPage", page: value });
+    dispatch(setPage(value));
   }
 
   function clearFiltersHandler() {
-    dispatch({ type: "clearFilters" });
+    dispatch(clearFilters());
+    dispatch(setPage(1));
   }
 
   return (
@@ -33,9 +34,9 @@ const Filters = () => {
       <RangeSlider />
       <CheckboxFilter />
       <Pagination
-        page={page}
+        page={movieData.movieList.page}
         siblingCount={0}
-        count={movieList.total_pages < 500 ? movieList.total_pages : 500}
+        count={movieData.movieList.total_pages < 500 ? movieData.movieList.total_pages : 500}
         sx={{ marginTop: "auto" }}
         onChange={handlePaginationChange}
       />

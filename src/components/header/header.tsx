@@ -3,16 +3,15 @@ import { AccountCircle } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
 import Search from "./search";
-import { useAuthContext } from "@/contexts/authentication/auth-context";
-import { memo } from "react";
+import { useAppSelector } from "@/store/global-store";
 
 type HeaderProps = {
   openModal: () => void;
 };
 
-const Header = memo(function Header({ openModal }: HeaderProps) {
+const Header = ({ openModal }: HeaderProps) => {
   const { pathname } = useLocation();
-  const isAutenticated = useAuthContext();
+  const isLoggedIn = useAppSelector((state) => state.authentication.isLoggedIn);
 
   return (
     <Box minWidth="100%" display="flex">
@@ -45,7 +44,7 @@ const Header = memo(function Header({ openModal }: HeaderProps) {
               display="flex"
               justifyContent="space-between"
             >
-              {isAutenticated.isLoggedIn && !pathname.includes("movies") && <Search />}
+              {isLoggedIn && !pathname.includes("movies") && <Search />}
             </Grid>
             <Grid item xs="auto" sm="auto" md="auto" lg="auto" order={{ xs: 2, sm: 2, md: 3, lg: 3 }} marginLeft="auto">
               <IconButton
@@ -65,6 +64,6 @@ const Header = memo(function Header({ openModal }: HeaderProps) {
       </AppBar>
     </Box>
   );
-});
+};
 
 export default Header;
