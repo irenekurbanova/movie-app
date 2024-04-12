@@ -25,16 +25,19 @@ const Movies = function () {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchFavoriteMovies(account_id));
-    if (!filtersData.searchActive) {
-      const data = {
-        page: moviesData.page,
-        sortby: filtersData.sortBy,
-        range: filtersData.releaseYear.pickedRange,
-        genres: filtersData.pickedGenres,
-      };
-      dispatch(fetchMoviesByFilters(data));
+    async function dispatchChaining() {
+      await Promise.all([dispatch(fetchFavoriteMovies(account_id))]);
+      if (!filtersData.searchActive) {
+        const data = {
+          page: moviesData.page,
+          sortby: filtersData.sortBy,
+          range: filtersData.releaseYear.pickedRange,
+          genres: filtersData.pickedGenres,
+        };
+        dispatch(fetchMoviesByFilters(data));
+      }
     }
+    dispatchChaining();
   }, [
     account_id,
     dispatch,
@@ -70,12 +73,7 @@ const Movies = function () {
                   </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                  <FavoriteButton
-                    openAlert={handleOpen}
-                    id={movie.id}
-                    isFavorite={moviesData.favorites.results.some((favorite) => favorite.id === movie.id)}
-                    key={movie.id}
-                  />
+                  <FavoriteButton openAlert={handleOpen} id={movie.id} key={movie.id} />
                 </CardActions>
               </Stack>
             </Card>

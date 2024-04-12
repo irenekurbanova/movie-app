@@ -2,12 +2,13 @@ import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/global-store";
-import { setCheckedGenre, fetchInitialGenresList, setPickedGenres } from "@/store/filter-slice";
+import { setCheckedGenre, fetchInitialGenresList, setPickedGenres, setSearchActive } from "@/store/filter-slice";
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
 const CheckboxFilter = function CheckboxFilter() {
+  const searchActive = useAppSelector((state) => state.filters.searchActive);
   const genres = useAppSelector((state) => state.filters.genres);
   const dispatch = useAppDispatch();
   const labels = genres.map((genre) => genre.name);
@@ -19,9 +20,9 @@ const CheckboxFilter = function CheckboxFilter() {
   }, [dispatch, genres.length]);
 
   function handleChange(event: React.SyntheticEvent, value: string[]) {
+    searchActive && dispatch(setSearchActive(false));
     dispatch(setCheckedGenre(value));
     dispatch(setPickedGenres());
-    // dispatch(setActiveFilter("checkbox"));
   }
 
   return (

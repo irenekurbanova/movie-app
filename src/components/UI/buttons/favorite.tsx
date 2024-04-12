@@ -8,12 +8,14 @@ import { fetchFavoriteMovies } from "@/store/movie-slice";
 type FavoriteButtonProps = {
   id: number;
   openAlert: () => void;
-  isFavorite: boolean;
+  // isFavorite: boolean;
 };
 
-const FavoriteButton = ({ id, isFavorite, openAlert }: FavoriteButtonProps) => {
+const FavoriteButton = ({ id, openAlert }: FavoriteButtonProps) => {
   const session_id = useAppSelector((state) => state.authentication.session_id);
+  const favoritesList = useAppSelector((state) => state.movies.favorites.results);
   const dispatch = useAppDispatch();
+  const isFavorite = favoritesList.some((favorite) => favorite.id === id);
   const [favorite, setFavorite] = useState(isFavorite);
 
   async function addToFavoriteHandler() {

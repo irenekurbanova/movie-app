@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/global-store";
-import { setSortBy } from "@/store/filter-slice";
+import { setSearchActive, setSortBy } from "@/store/filter-slice";
 import { setPage } from "@/store/movie-slice";
 
 const SelectRatingData = {
@@ -10,7 +10,9 @@ const SelectRatingData = {
 };
 
 const SelectFilter = function SelectFilter() {
+  const searchActive = useAppSelector((state) => state.filters.searchActive);
   const filtersData = useAppSelector((state) => state.filters);
+
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
@@ -24,11 +26,8 @@ const SelectFilter = function SelectFilter() {
   };
 
   function handleSelectChange(event: SelectChangeEvent) {
+    searchActive && dispatch(setSearchActive(false));
     dispatch(setSortBy(event.target.value));
-    // if (!filtersData.activeFilter.select) {
-    //   dispatch(setActiveFilter("select"));
-    //   dispatch(setActiveFilter("search"));
-    // }
     dispatch(setPage(1));
   }
 

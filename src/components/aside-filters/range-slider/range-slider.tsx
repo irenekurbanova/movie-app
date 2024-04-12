@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/global-store";
 import { Typography, Box, Slider } from "@mui/material";
-import { setReleaseYear } from "@/store/filter-slice";
+import { setReleaseYear, setSearchActive } from "@/store/filter-slice";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -12,6 +12,8 @@ type MarksProps = {
 
 const RangeSlider = function RangeSlider() {
   const releaseYear = useAppSelector((state) => state.filters.releaseYear);
+  const searchActive = useAppSelector((state) => state.filters.searchActive);
+
   const dispatch = useAppDispatch();
 
   const marks = (): MarksProps[] => {
@@ -25,8 +27,8 @@ const RangeSlider = function RangeSlider() {
   };
 
   const handleChange = (event: Event, newValue: number | number[]) => {
+    searchActive && dispatch(setSearchActive(false));
     dispatch(setReleaseYear(newValue as number[]));
-    // setActiveFilter("range");
   };
 
   return (

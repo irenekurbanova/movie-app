@@ -15,18 +15,22 @@ const Search = function Search() {
   const dispatch = useAppDispatch();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    !event.target.value.length && dispatch(setSearchActive(false));
-    setSearchValue(event.target.value);
-    dispatch(clearFilters());
-    dispatch(setSearchActive(true));
-    dispatch(setPage(1));
+    if (event.target.value.length) {
+      setSearchValue(event.target.value);
+      dispatch(clearFilters());
+      dispatch(setSearchActive(true));
+      dispatch(setPage(1));
+    } else {
+      dispatch(setSearchActive(false));
+      setSearchValue("");
+    }
   }
 
   useEffect(() => {
     if (filters.searchActive) {
       const data = { query: debouncedQuery, page };
       dispatch(fetchMoviesByName(data));
-    }
+    } else setSearchValue("");
   }, [debouncedQuery, dispatch, filters.searchActive, page]);
 
   return (
