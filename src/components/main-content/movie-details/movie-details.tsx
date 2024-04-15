@@ -1,7 +1,7 @@
 import { Box, Card, CardMedia, Tab, Grid } from "@mui/material";
 import { TabContext, TabList } from "@mui/lab";
 import { useLoaderData } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CardTitle from "./title";
 import ActorsTab from "./tabs/actors";
 import CrewTab from "./tabs/crew";
@@ -9,10 +9,23 @@ import OverviewTab from "./tabs/overview";
 import UserAlert from "@/components/UI/alert/alert";
 
 export default function MovieDetails() {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [imgHeight, setImageHeight] = useState<number>();
   const movie = useLoaderData() as MovieProps;
 
   const [value, setValue] = useState("1");
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (imageRef.current) {
+      imageRef.current.onload = () => {
+        if (imageRef.current) {
+          const { height } = imageRef.current.getBoundingClientRect();
+          setImageHeight(height);
+        }
+      };
+    }
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -30,17 +43,18 @@ export default function MovieDetails() {
   };
 
   return (
-    <Card>
-      <Grid container maxHeight="89vh">
-        <Grid item md={6}>
+    <Card className="mb-3.5">
+      <Grid container>
+        <Grid item flex={1} md={6}>
           <CardMedia
+            ref={imageRef}
             component="img"
             sx={{ padding: 0 }}
             image={`https://image.tmdb.org/t/p/original` + movie.poster_path}
             alt={movie.title}
           />
         </Grid>
-        <Grid item md={6} padding={2} display="flex" flexDirection="column" gap={2} maxHeight="89vh">
+        <Grid item maxHeight={imgHeight} md={6} padding={2} display="flex" flexDirection="column" gap={2}>
           <CardTitle
             title={movie.title}
             release_date={movie.release_date}
