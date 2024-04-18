@@ -1,13 +1,14 @@
 import { InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useCallback, useMemo, useState } from "react";
-import { useAppDispatch } from "@/store/global-store";
+import { useAppDispatch, useAppSelector } from "@/store/global-store";
 import { setSearchActive } from "@/store/filter-slice";
 import { setPage, setQuery } from "@/store/movie-slice";
 import debounce from "lodash.debounce";
 
 const Search = () => {
-  const [inputValue, setInputValue] = useState("");
+  const query = useAppSelector((state) => state.movies.query);
+  const [inputValue, setInputValue] = useState(query);
   const dispatch = useAppDispatch();
 
   const setState = useCallback(
