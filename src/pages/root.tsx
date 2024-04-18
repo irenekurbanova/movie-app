@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "@/components/header/header";
-import Modal from "@/components/UI/modal/modal";
+import Modal from "@/components/modal/modal";
 import { useState } from "react";
 import AuthenticationStepper from "@/auth/auth-stepper";
 import { Provider } from "react-redux";

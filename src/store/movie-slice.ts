@@ -3,6 +3,7 @@ import { MovieDataProps } from "./store-types";
 import { getFavoriteMovieList, getMovieBySearch, getMovies } from "@/api/movie-data";
 
 const initialState: MovieDataProps = {
+  query: "",
   movieList: { page: 0, results: [], total_pages: 0, total_results: 0 },
   favorites: { page: 0, results: [], total_pages: 0, total_results: 0 },
   page: 1,
@@ -12,6 +13,9 @@ const moviesSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {
+    setQuery(state, action) {
+      state.query = action.payload;
+    },
     setFavoritesList(state, action: PayloadAction<MovieDataProps["favorites"]>) {
       state.favorites = action.payload;
     },
@@ -41,6 +45,7 @@ export const fetchMoviesByFilters = createAsyncThunk(
     const { page, sortby, range, genres } = data;
     try {
       const data = await getMovies(page, sortby, range, genres);
+
       return data;
     } catch (error) {
       console.log(error);
@@ -54,6 +59,7 @@ export const fetchMoviesByName = createAsyncThunk(
     const { query, page } = data;
     try {
       const data = await getMovieBySearch(query, page);
+
       return data;
     } catch (error) {
       console.log(error);
@@ -76,5 +82,5 @@ export const fetchFavoriteMovies = createAsyncThunk("movies/fetchFavoriteMovies"
   }
 });
 
-export const { setFavoritesList, setMovieList, setPage } = moviesSlice.actions;
+export const { setQuery, setFavoritesList, setMovieList, setPage } = moviesSlice.actions;
 export { moviesSlice };

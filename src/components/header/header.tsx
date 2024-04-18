@@ -2,7 +2,7 @@ import { Box, AppBar, Typography, IconButton, Toolbar, Grid } from "@mui/materia
 import { AccountCircle } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
-import Search from "./search";
+import Search from "../search/search";
 import { useAppSelector } from "@/store/global-store";
 
 type HeaderProps = {

@@ -2,11 +2,11 @@ import { Box, Card, CardMedia, Tab, Grid } from "@mui/material";
 import { TabContext, TabList } from "@mui/lab";
 import { useLoaderData } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import CardTitle from "./title";
+import CardTitle from "./title/card-title";
 import ActorsTab from "./tabs/actors";
 import CrewTab from "./tabs/crew";
 import OverviewTab from "./tabs/overview";
-import UserAlert from "@/components/UI/alert/alert";
+import UserAlert from "@/components/alert/alert";
 
 export default function MovieDetails() {
   const imageRef = useRef<HTMLImageElement>(null);

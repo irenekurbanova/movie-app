@@ -9,7 +9,11 @@ const SelectRatingData = {
   vote_average: "По рейтингу",
 };
 
-const SelectFilter = function SelectFilter() {
+type SelectFilterProps = {
+  disabled: boolean;
+};
+
+const SelectFilter = ({ disabled }: SelectFilterProps) => {
   const searchActive = useAppSelector((state) => state.filters.searchActive);
   const filtersData = useAppSelector((state) => state.filters);
 
@@ -37,6 +41,7 @@ const SelectFilter = function SelectFilter() {
         Сортировать по:
       </InputLabel>
       <Select
+        disabled={disabled}
         variant="standard"
         defaultOpen={true}
         open={open}

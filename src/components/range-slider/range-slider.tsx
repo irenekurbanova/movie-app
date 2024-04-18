@@ -10,7 +10,11 @@ type MarksProps = {
   value: number;
 };
 
-const RangeSlider = function RangeSlider() {
+type RangeSliderProps = {
+  disabled: boolean;
+};
+
+const RangeSlider = ({ disabled }: RangeSliderProps) => {
   const releaseYear = useAppSelector((state) => state.filters.releaseYear);
   const searchActive = useAppSelector((state) => state.filters.searchActive);
 
@@ -35,6 +39,7 @@ const RangeSlider = function RangeSlider() {
     <Box width="100%" display="flex" flexDirection="column" gap={5}>
       <Typography variant="subtitle1">Год релиза:</Typography>
       <Slider
+        disabled={disabled}
         getAriaLabel={() => "Temperature range"}
         step={1}
         shiftStep={8}

@@ -1,10 +1,6 @@
 import axios from "axios";
 import { TMBD_GET_REQUEST } from "./config";
-
-interface ValidationError {
-  message: string;
-  errors: Record<string, string[]>;
-}
+import { json } from "react-router-dom";
 
 export async function getMovieBySearch(query: string, page?: number) {
   let pageNumber;
@@ -30,12 +26,15 @@ export async function getFavoriteMovieList(account_id: string, page: number = 1)
         page: page,
       },
     });
-    if (response.status === 200) {
-      return response.data;
-    }
-    console.log(response.data);
+    return response.data;
   } catch (error) {
-    console.error(error);
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+      // Do something with this error...
+    } else {
+      console.error(error);
+    }
   }
 }
 
@@ -63,7 +62,7 @@ export async function getGenreList() {
       return response.data;
     }
   } catch (error) {
-    if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
+    if (axios.isAxiosError(error)) {
       console.log(error.status);
       console.error(error.response);
       // Do something with this error...
@@ -81,11 +80,12 @@ export async function getMovieDetails(id: string) {
       return response.data;
     }
   } catch (error) {
-    if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
-      console.error(error.response);
-      // Do something with this error...
-      const { message } = error;
-      throw new Error(JSON.stringify(message));
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.error(error.response.data.status_message);
+        // Do something with this error...
+        throw json({ message: error.response.data.status_message }, { status: error.response.status });
+      }
     } else {
       console.error(error);
     }
@@ -99,7 +99,7 @@ export async function getMovieCredits(id: number) {
       return response.data;
     }
   } catch (error) {
-    if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
+    if (axios.isAxiosError(error)) {
       console.log(error.status);
       console.error(error.response);
       // Do something with this error...
@@ -131,7 +131,7 @@ export async function getMovies(page: number, sortBy: string, range?: number[], 
       return response.data;
     }
   } catch (error) {
-    if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
+    if (axios.isAxiosError(error)) {
       console.log(error.status);
       console.error(error.response);
       // Do something with this error...

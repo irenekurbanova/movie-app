@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { Paper, Typography, MobileStepper, Button, useTheme } from "@mui/material";
 import { isValidEmail } from "@/utilities/helpers";
@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { setEmail, setToken, setIsLoggedIn } from "@/store/auth-slice";
 import { fetchAccountID } from "@/store/auth-slice";
 import { API_ACCESS_TOKEN } from "@/api/config";
-import { useAppDispatch, useAppSelector } from "@/store/global-store";
+import { useAppDispatch } from "@/store/global-store";
 
 type AuthenticationStepperProps = {
   closeModal: () => void;
@@ -29,7 +29,6 @@ const AuthenticationStepper = ({ closeModal }: AuthenticationStepperProps) => {
   const [inputValue, setInputValue] = useState({ email: "", token: API_ACCESS_TOKEN });
 
   const dispatch = useAppDispatch();
-  const accountID = useAppSelector((state) => state.authentication.session_id);
 
   const handleNext = () => {
     if (isValidEmail(inputValue.email)) {
@@ -43,18 +42,19 @@ const AuthenticationStepper = ({ closeModal }: AuthenticationStepperProps) => {
   };
 
   const handleComplete = async () => {
-    dispatch(setToken(inputValue.token));
-    dispatch(setIsLoggedIn(true));
-
-    Cookies.set("accountID", accountID);
-    Cookies.set("token", inputValue.token);
-    Cookies.set("email", inputValue.email);
-    closeModal();
+    try {
+      await dispatch(fetchAccountID());
+      dispatch(setIsLoggedIn(true));
+      dispatch(setToken(inputValue.token));
+      Cookies.set("token", inputValue.token);
+      Cookies.set("email", inputValue.email);
+      closeModal();
+    } catch (error) {
+      console.error(error);
+      dispatch(setIsLoggedIn(false));
+      closeModal();
+    }
   };
-
-  useEffect(() => {
-    dispatch(fetchAccountID());
-  }, [dispatch]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     event.target.name === "email" && setInputValue({ ...inputValue, email: event.target.value });

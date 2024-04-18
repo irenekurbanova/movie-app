@@ -3,7 +3,6 @@ import { FilterDataProps } from "./store-types";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: FilterDataProps = {
-  query: "",
   genres: [],
   pickedGenres: "",
   sortBy: "По популярности",
@@ -15,9 +14,6 @@ const filtersSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    setQuery(state, action) {
-      state.query = action.payload;
-    },
     setSearchActive(state, action: PayloadAction<boolean>) {
       state.searchActive = action.payload;
     },
@@ -46,8 +42,6 @@ const filtersSlice = createSlice({
       state.releaseYear.pickedRange = action.payload;
     },
     clearFilters(state) {
-      // state.activeFilter = initialState.activeFilter;
-      state.query = initialState.query;
       state.releaseYear = initialState.releaseYear;
       state.sortBy = initialState.sortBy;
       state.pickedGenres = initialState.pickedGenres;
@@ -81,8 +75,6 @@ export const fetchInitialGenresList = createAsyncThunk("filters/fetchGenreList",
 });
 
 export const {
-  setQuery,
-  // setActiveFilter,
   setSearchActive,
   setInitialGenres,
   setCheckedGenre,

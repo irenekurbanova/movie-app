@@ -1,27 +1,10 @@
-import Filters from "@/components/aside-filters/filter-bar";
-import Movies from "@/components/main-content/movies";
-import Cookies from "js-cookie";
+import Filters from "@/components/filters/filter-bar";
+import Movies from "@/components/movies/movies";
 import { Grid } from "@mui/material";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/global-store";
-import { setToken, setIsLoggedIn, setSessionId } from "@/store/auth-slice";
+import { useAppSelector } from "@/store/global-store";
 
-const HomePage = function HomePage() {
+const HomePage = () => {
   const isLoggedIn = useAppSelector((state) => state.authentication.isLoggedIn);
-  const dispatch = useAppDispatch();
-  const token = Cookies.get("token");
-  const accountID = Cookies.get("accountID");
-
-  useEffect(() => {
-    function handleLogIn() {
-      if (token?.length && accountID?.length) {
-        dispatch(setToken(token));
-        dispatch(setIsLoggedIn(true));
-        dispatch(setSessionId(accountID));
-      }
-    }
-    handleLogIn();
-  }, [dispatch, token, accountID]);
 
   return (
     <>

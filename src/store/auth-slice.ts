@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthDataProps } from "./store-types";
 import { getAccountID } from "@/api/authentication";
+import Cookies from "js-cookie";
 
 const initialState: AuthDataProps = {
   email: "",
@@ -29,6 +30,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchAccountID.fulfilled, (state, action) => {
       state.session_id = action.payload;
+      state.isLoggedIn = true;
     });
   },
 });
@@ -36,6 +38,7 @@ const authSlice = createSlice({
 export const fetchAccountID = createAsyncThunk("authentication/getAccountID", async () => {
   try {
     const account = await getAccountID();
+    Cookies.set("accountID", account.id);
     return account.id;
   } catch (error) {
     console.error(error);

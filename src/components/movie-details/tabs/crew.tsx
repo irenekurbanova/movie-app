@@ -2,10 +2,7 @@ import { getMovieCredits } from "@/api/movie-data";
 import { TabPanel } from "@mui/lab";
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
 import { useState, useEffect } from "react";
-
-type CrewTabProps = {
-  id: number;
-};
+import { CrewTabProps } from "./types";
 
 const CrewTab = ({ id }: CrewTabProps) => {
   const [crew, setCrew] = useState<CrewProps[]>([]);

@@ -2,12 +2,9 @@ import { getMovieCredits } from "@/api/movie-data";
 import { TabPanel } from "@mui/lab";
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
 import { useEffect, useState } from "react";
+import { ActorsProps } from "./types";
 
-type ActorsTab = {
-  id: number;
-};
-
-const ActorsTab = ({ id }: ActorsTab) => {
+const ActorsTab = ({ id }: ActorsProps) => {
   const [cast, setCast] = useState<CastProps[]>([]);
 
   useEffect(() => {

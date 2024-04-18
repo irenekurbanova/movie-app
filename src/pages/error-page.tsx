@@ -10,22 +10,21 @@ export default function ErrorPage() {
     errorContent = (
       <>
         <Typography variant="h2">Oops!</Typography>
-        <Typography variant="h5">{error.status}</Typography>
-        <Typography variant="caption">{error.statusText}</Typography>
-        {error.data?.message && <Typography variant="caption">{error.data.message}</Typography>}
+        <Typography variant="h3">{error.status}</Typography>
+        <Typography variant="h5">{error.data.message}</Typography>
       </>
     );
-  } else if (error instanceof Error) {
+  } else {
     errorContent = (
       <>
         <Typography variant="h2">Oops!</Typography>
-        <Typography variant="h6">{(error.message && error.message) || "Something went wrong..."}</Typography>
+        <Typography variant="h3">Something went wrong</Typography>
       </>
     );
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Box
         minHeight="100vh"
         display="flex"

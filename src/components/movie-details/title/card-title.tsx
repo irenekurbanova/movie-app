@@ -1,4 +1,4 @@
-import FavoriteButton from "@/components/UI/buttons/favorite";
+import FavoriteButton from "@/components/buttons/favorite";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Stack, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";

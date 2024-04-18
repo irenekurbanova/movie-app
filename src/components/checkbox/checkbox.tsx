@@ -7,7 +7,11 @@ import { setCheckedGenre, fetchInitialGenresList, setPickedGenres, setSearchActi
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
-const CheckboxFilter = function CheckboxFilter() {
+type CheckboxFilterProps = {
+  disabled: boolean;
+};
+
+const CheckboxFilter = ({ disabled }: CheckboxFilterProps) => {
   const searchActive = useAppSelector((state) => state.filters.searchActive);
   const genres = useAppSelector((state) => state.filters.genres);
   const dispatch = useAppDispatch();
@@ -27,6 +31,7 @@ const CheckboxFilter = function CheckboxFilter() {
 
   return (
     <Autocomplete
+      disabled={disabled}
       multiple
       limitTags={2}
       disableCloseOnSelect
