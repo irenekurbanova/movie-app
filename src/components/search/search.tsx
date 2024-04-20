@@ -21,12 +21,11 @@ const Search = () => {
   );
 
   const debouncedSendRequest = useMemo(() => {
-    return debounce(setState, 1000);
+    return debounce(setState, 1500);
   }, [setState]);
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.value.length) {
-      console.log("It is NOT working");
       setInputValue("");
       dispatch(setQuery(""));
       dispatch(setSearchActive(false));

@@ -33,7 +33,7 @@ const Filters = () => {
         <Typography variant="h6" fontWeight="medium">
           Фильтры
         </Typography>
-        <IconButton onClick={clearFiltersHandler}>
+        <IconButton onClick={clearFiltersHandler} disabled={disabled}>
           <CloseIcon />
         </IconButton>
       </Box>

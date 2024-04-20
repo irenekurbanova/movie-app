@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ErrorData } from "./store-types";
 
 const initialState: ErrorData = {
-  message: "",
+  message: "some message",
   code: null,
-  showError: false,
+  showError: true,
 };
 
 export const errorSlice = createSlice({
