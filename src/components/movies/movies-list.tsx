@@ -11,7 +11,15 @@ const MoviesList = ({ data, openAlert }: MoviesListProps) => {
   return (
     <>
       {data.map((movie) => (
-        <Grid item xs={12} sm={4} md={4} lg={4} key={movie.id} flexBasis={"100%"} display={"flex"}>
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          md={4}
+          lg={4}
+          key={movie.id}
+          className="basis-full flex justify-center md:justify-start"
+        >
           <MovieCard
             id={movie.id}
             backdrop_path={movie.backdrop_path}

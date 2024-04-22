@@ -14,7 +14,16 @@ const HomePage = () => {
           <Grid item xs={12} md={3} display="flex">
             <Filters />
           </Grid>
-          <Grid item xs={12} md={9} padding={1} maxHeight="90vh" display="flex" alignItems="stretch" overflow="auto">
+          <Grid
+            item
+            className="lg:max-h-[90vh] md:max-h-[90vh] sm:h-full "
+            xs={12}
+            md={9}
+            padding={1}
+            display="flex"
+            alignItems="stretch"
+            overflow="auto"
+          >
             <Movies />
           </Grid>
         </Grid>
